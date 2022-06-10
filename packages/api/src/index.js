@@ -21,13 +21,6 @@ import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
 
 const router = Router()
-router.all('*', envAll)
-router.options('*', corsOptions)
-
-router.get('*', withMode(READ_ONLY))
-router.head('*', withMode(READ_ONLY))
-router.post('*', withMode(READ_WRITE))
-router.delete('*', withMode(READ_WRITE))
 
 /**
  * It defines a list of "middlewares" that need to be applied for a given authentication mode.
@@ -62,7 +55,18 @@ const auth = {
 }
 
 /* eslint-disable no-multi-spaces */
+router.all('*', envAll)
+router.options('*', corsOptions)
+
+// Exception for login to not be handled by POST mode middleware
+// Needs to be added first
 router.post('/user/login',          auth['🌍'](userLoginPost))
+
+router.get('*', withMode(READ_ONLY))
+router.head('*', withMode(READ_ONLY))
+router.delete('*', withMode(READ_WRITE))
+router.post('*', withMode(READ_WRITE))
+
 router.get('/status/:cid',          auth['🌍'](statusGet))
 router.get('/car/:cid',             auth['🌍'](carGet))
 router.head('/car/:cid',            auth['🌍'](carHead))
