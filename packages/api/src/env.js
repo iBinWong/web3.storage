@@ -16,7 +16,7 @@ import pkg from '../package.json'
  * @property {string} VERSION
  * @property {string} COMMITHASH
  * @property {string} SALT
- * @property {string} MAGIC_SECRET_KEY
+ * @property {string} SLACK_USER_REQUEST_WEBHOOK_URL
  * @property {string} CLUSTER_API_URL
  * @property {string} [CLUSTER_BASIC_AUTH_TOKEN]
  * @property {string} PG_REST_URL

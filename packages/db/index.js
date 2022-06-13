@@ -127,6 +127,24 @@ export class DBClient {
   }
 
   /**
+   * Gets a user by its userId
+   * @param {number} userId
+   */
+  async getUserById (userId) {
+    const { data, error } = await this._client
+      .from('user')
+      .select(getUserQuery())
+      .eq('id', userId)
+      .single()
+
+    if (error) {
+      throw new DBError(error)
+    }
+
+    return data
+  }
+
+  /**
    * Get user by its issuer.
    *
    * @param {string} issuer

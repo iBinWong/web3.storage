@@ -164,6 +164,13 @@ export async function userRequestPost (request, env) {
     requestedTagValue,
     userProposalForm
   )
+
+  try {
+    notifySlack(userId, tagName, requestedTagValue, userProposalForm, env.db);
+  } catch (e) {
+    console.error("Failed to notify Slack: ", e);
+  }
+
   return new JSONResponse(res)
 }
 
@@ -276,3 +283,61 @@ export async function userUploadsRename (request, env) {
   const res = await env.db.renameUpload(user, cid, name)
   return new JSONResponse(res)
 }
+
+const notifySlack = async (
+  userId,
+  tagName,
+  requestedTagValue,
+  userProposalForm,
+  db
+) => {
+  const webhookUrl = getServiceConfig().SLACK_USER_REQUEST_WEBHOOK_URL;
+
+  if (!webhookUrl) {
+    return;
+  }
+
+  /** @type {import('../bindings').RequestForm} */
+  let form;
+  try {
+    form = JSON.parse(userProposalForm);
+  } catch (e) {
+    console.error("Failed to parse user request form: ", e);
+    return;
+  }
+
+  const user = await db.getUserById(userId);
+
+  fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+      "Content-type": "application/json",
+    },
+    body: JSON.stringify({
+      text: `
+>*Username*
+>${user?.name}
+>
+>*Email*
+>${user.email}
+>
+>*User Id*
+>${userId}
+>
+>*Requested Tag Name*
+>${tagName}
+>
+>*Requested Tag Value*
+>${requestedTagValue}
+>${form
+        .map(
+          ({ label, value }) => `
+>*${label}*
+>${value}
+>`
+        )
+        .join("")}
+`,
+    }),
+  });
+};
