@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { Web3Storage } from 'web3.storage';
 
-import { API, deleteUpload, getToken, getUploads, renameUpload, listPins } from 'lib/api';
+import { API, deleteUpload, getToken, getUploads, renameUpload } from 'lib/api';
 import { useUploadProgress } from './uploadProgressContext';
 import { useUser } from './userContext';
 
@@ -59,32 +59,16 @@ export const STATUS = {
  */
 
 /**
- * @typedef {Object} PinStatus
- * @property {string} requestid
- * @property {string} status
- * @property {string} created
- * @property {PinObject} pin
- */
-
-/**
- * @typedef {Object} PinsList
- * @property {number} count
- * @property {PinStatus[]} results
- */
-
-/**
  * @typedef {Object} UploadsContextProps
- * @property {Upload[]} uploads Uploads available in this account
- * @property {PinStatus[]} pinned Files uploaded through the pinning service on this account
+ * @property {Upload[]} uploads A Page of uploads
+ * @property {number} pages Total pages of uploads
+ * @property {number} count Total uploads
  * @property {(cid: string) => Promise<void>} deleteUpload Method to delete an existing upload
  * @property {(cid: string, name: string)=>Promise<void>} renameUpload Method to rename an existing upload
- * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that refetches list of uploads based on certain params
- * @property {(status: string, token: string) => Promise<PinStatus[]>} listPinned Method that fetches list of pins
+ * @property {(args?: UploadArgs) => Promise<Upload[]>} getUploads Method that fetches list of uploads based on certain params
  * @property {(file:FileProgress) => Promise<void>} uploadFiles Method to upload a new file
  * @property {boolean} isFetchingUploads Whether or not new uploads are being fetched
  * @property {number|undefined} fetchDate The date in which the last uploads list fetch happened
- * @property {number|undefined} fetchPinsDate The date at which pins were last fetched
- * @property {boolean} isFetchingPinned Whether or not pinned files are being fetched
  * @property {UploadProgress} uploadsProgress The progress of any current uploads
  * @property {() => boolean } clearUploadedFiles clears completed files from uploads list
  */
@@ -112,11 +96,10 @@ export const UploadsProvider = ({ children }) => {
   } = useUser();
 
   const [uploads, setUploads] = useState(/** @type {Upload[]} */ ([]));
-  const [pinned, setPinned] = useState(/** @type {PinStatus[]} */ ([]));
+  const [pages, setPages] = useState(0);
+  const [count, setCount] = useState(0);
   const [isFetchingUploads, setIsFetchingUploads] = useState(false);
   const [fetchDate, setFetchDate] = useState(/** @type {number|undefined} */ (undefined));
-  const [isFetchingPinned, setIsFetchingPinned] = useState(false);
-  const [fetchPinsDate, setFetchPinsDate] = useState(/** @type {number|undefined} */ (undefined));
   const [filesToUpload, setFilesToUpload] = useState(/** @type {FileProgress[]} */ ([]));
   const { initialize, updateFileProgress, progress, markFileCompleted, markFileFailed } = useUploadProgress([]);
 
@@ -180,36 +163,37 @@ export const UploadsProvider = ({ children }) => {
 
   const getUploadsCallback = useCallback(
     /** @type {(args?: UploadArgs) => Promise<Upload[]>}} */
-    async (
-      args = {
-        size: 1000,
-        before: new Date().toISOString(),
-      }
-    ) => {
+    async args => {
       setIsFetchingUploads(true);
-      const updatedUploads = await getUploads(args);
-      setUploads(updatedUploads);
+      const { uploads, pages, count } = await getUploads(args);
+      setUploads(uploads);
+      setPages(pages);
+      setCount(count);
       setFetchDate(Date.now());
       setIsFetchingUploads(false);
 
-      return updatedUploads;
+      return uploads;
     },
-    [setUploads, setIsFetchingUploads]
+    [setUploads, setPages, setCount, setIsFetchingUploads]
   );
 
-  const listPinnedCallback = useCallback(
-    /** @type {(status: string, token: string) => Promise<PinStatus[]>} */
-    async (status, token) => {
-      setIsFetchingPinned(true);
-      const pinsResponse = await listPins(status, token); // *** CHANGE TO 'pinned' ***
-      const updatedPinned = pinsResponse.results;
-      setPinned(updatedPinned);
-      setFetchPinsDate(Date.now());
-      setIsFetchingPinned(false);
-
-      return updatedPinned;
+  const renameUploadHandler = useCallback(
+    /** @type {(cid: string, name: string) => Promise<void>}} */
+    async (cid, name) => {
+      try {
+        renameUpload(cid, name);
+      } catch (error) {
+        if (error instanceof Error) {
+          throw error;
+        }
+        throw Error('Unknown error');
+      }
+      const renameUploadIndex = uploads.findIndex(upload => upload.cid === cid);
+      uploads[renameUploadIndex].name = name;
+      setUploads(uploads);
+      return;
     },
-    [setPinned]
+    [uploads]
   );
 
   return (
@@ -219,15 +203,13 @@ export const UploadsProvider = ({ children }) => {
         ({
           uploadFiles,
           deleteUpload,
-          renameUpload,
+          renameUpload: renameUploadHandler,
           getUploads: getUploadsCallback,
-          listPinned: listPinnedCallback,
           uploads,
-          pinned,
+          pages,
+          count,
           isFetchingUploads,
           fetchDate,
-          isFetchingPinned,
-          fetchPinsDate,
           uploadsProgress: progress,
           clearUploadedFiles,
         })

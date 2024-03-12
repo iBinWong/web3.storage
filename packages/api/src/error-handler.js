@@ -5,19 +5,25 @@ import { HTTPError, PinningServiceApiError } from './errors.js'
 /**
  * @param {Error & {status?: number;code?: string;reason?: string; details?: string; }} err
  * @param {import('./env').Env} env
+ * @param {Request} request
  */
-export function errorHandler (err, { log }) {
-  console.error(err.stack)
+export function errorHandler (err, { log }, request) {
+  console.error(err)
 
   let status = err.status || 500
   if (status >= 500) {
     log.error(err)
   }
 
-  if (err instanceof PinningServiceApiError) {
+  // As the pinning service requires a certain specification
+  // Always return the nested error object for any pinning service endpoints
+  const requestUrl = new URL(request.url)
+  if (err instanceof PinningServiceApiError || /^\/pins/.test(requestUrl.pathname)) {
     const error = {
-      reason: err.reason,
-      details: err.details
+      error: {
+        reason: err.reason || err.code,
+        details: err.details || err.message
+      }
     }
     return new JSONResponse(error, { status })
   }

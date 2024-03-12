@@ -1,5 +1,7 @@
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 
+import { createW3upLaunchConfig, W3upLaunchContext } from '../components/w3up-launch.js';
+
 class MyDocument extends Document {
   /**
    * @param {import("next/document").DocumentContext} ctx
@@ -23,15 +25,22 @@ class MyDocument extends Document {
           <meta name="msapplication-TileColor" content="#3a0839" />
           <meta name="msapplication-config" content="/browserconfig.xml" />
           <meta name="theme-color" content="#5bbad5" />
-          <script
-            type="text/javascript"
-            dangerouslySetInnerHTML={{ __html: /** @type {string} */ (process.env.rawJsFromFile) }}
-          ></script>
         </Head>
         <body>
           <Main />
           <NextScript />
           <div id="modal-root"></div>
+          {/* add this for debuggability of launch announcements that only appear when configured */}
+          <W3upLaunchContext.Consumer>
+            {w3upLaunch => {
+              return (
+                <script
+                  type="application/json"
+                  dangerouslySetInnerHTML={{ __html: JSON.stringify(createW3upLaunchConfig(w3upLaunch)) }}
+                ></script>
+              );
+            }}
+          </W3upLaunchContext.Consumer>
         </body>
       </Html>
     );

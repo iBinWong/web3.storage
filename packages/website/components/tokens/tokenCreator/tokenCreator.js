@@ -1,8 +1,9 @@
+import { BsPlus, BsArrowRight } from 'react-icons/bs';
 import clsx from 'clsx';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
-import countly from 'lib/countly';
+import analytics, { saEvent } from 'lib/analytics';
 import Button, { ButtonVariant } from 'components/button/button';
 import { useTokens } from 'components/contexts/tokensContext';
 import { useUser } from 'hooks/use-user';
@@ -29,15 +30,15 @@ const TokenCreator = ({ content }) => {
   const onTokenCreate = useCallback(
     async e => {
       // Tracking
-      countly.trackEvent(
-        countly.events.TOKEN_CREATE,
+      saEvent(
+        analytics.events.TOKEN_CREATE,
         !tokens.length
           ? {
-              ui: countly.ui.TOKENS_EMPTY,
+              ui: analytics.ui.TOKENS_EMPTY,
               action: 'New API Token',
             }
           : {
-              ui: countly.ui.NEW_TOKEN,
+              ui: analytics.ui.NEW_TOKEN,
               action: 'Create new token',
             }
       );
@@ -110,11 +111,10 @@ const TokenCreator = ({ content }) => {
               className="token-creator-input"
               placeholder={content.placeholder}
               onChange={handleInputValueChange}
-              onBlur={() => {
-                inputRef.current?.classList.add('unfocused');
-              }}
             />
-            <button className="token-creator-submit">{inputHasValue ? '→' : '+'}</button>
+            <button className="token-creator-submit">
+              {inputHasValue ? <BsArrowRight></BsArrowRight> : <BsPlus></BsPlus>}
+            </button>
           </form>
           {hasError ? (
             <>⚠ {errorMessage}</>

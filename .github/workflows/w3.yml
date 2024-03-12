@@ -6,12 +6,14 @@ on:
     paths:
       - 'packages/w3/**'
       - '.github/workflows/w3.yml'
+      - 'package-lock.json'
   pull_request:
     branches:
       - main
     paths:
       - 'packages/w3/**'
       - '.github/workflows/w3.yml'
+      - 'package-lock.json'
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -41,6 +43,9 @@ jobs:
       # We want this one to fail if we can't upload to the staging api using the workspace version of the client.
       - uses: bahmutov/npm-install@v1
       - name: Test upload to staging
+        # disabled until we can make this succeed while staging is in maintenance mode
+        # as part of old.web3.storage sunset
+        continue-on-error: true
         run: |
           npm run build -w packages/client
           echo "$(date --utc --iso-8601=seconds) web3.storage upload test" > ./upload-test-small

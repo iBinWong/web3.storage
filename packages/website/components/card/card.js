@@ -2,14 +2,14 @@
 import { useCallback, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Link from 'next/link';
 
 import Img from '../cloudflareImage.js';
+import Link from '../link/link';
 import CardTier from './card-tier';
 import Button from '../button/button';
 import NpmIcon from '../../assets/icons/npmicon';
 import Windows from '../../assets/icons/windows';
-import countly from '../../lib/countly';
+import analytics, { saEvent } from '../../lib/analytics';
 
 // ====================================================================== Params
 /**
@@ -27,10 +27,10 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   const tracking = {};
   if (typeof card.cta === 'object') {
     if (card.cta.event) {
-      tracking.event = countly.events[card.cta.event];
+      tracking.event = analytics.events[card.cta.event];
     }
     if (card.cta.ui) {
-      tracking.ui = countly.ui[card.cta.ui];
+      tracking.ui = analytics.ui[card.cta.ui];
     }
     if (card.cta.action) {
       tracking.action = card.cta.action;
@@ -44,16 +44,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
   }, [onCardLoad]);
 
   const onLinkClick = useCallback(e => {
-    countly.trackCustomLinkClick(countly.events.LINK_CLICK_EXPLORE_DOCS, e.currentTarget);
+    saEvent(analytics.events.LINK_CLICK_EXPLORE_DOCS, { link_text: e.currentTarget });
   }, []);
-
-  const handleKeySelect = useCallback(
-    (e, url) => {
-      onLinkClick(e);
-      router.push(url);
-    },
-    [router, onLinkClick]
-  );
 
   const handleButtonClick = useCallback(
     cta => {
@@ -80,17 +72,8 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
           <div key={category.heading} className="category">
             <div className="category-heading">{category.heading}</div>
             {category.links.map(link => (
-              <Link href={link.url} key={link.text} passHref>
-                <a
-                  href="replace"
-                  className="category-link"
-                  onClick={onLinkClick}
-                  onKeyPress={e => handleKeySelect(e, link.url)}
-                  tabIndex={0}
-                  role="button"
-                >
-                  {link.text}
-                </a>
+              <Link className="category-link" onClick={onLinkClick} href={link.url} key={link.text}>
+                {link.text}
               </Link>
             ))}
           </div>
@@ -143,13 +126,13 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     }
     if (svg) {
       return (
-        <a href={obj.url} target="_blank" rel="noreferrer">
+        <a href={obj.url} target="_blank" rel="noreferrer noopener">
           {svg}
         </a>
       );
     }
     return (
-      <a href={obj.url} target="_blank" rel="noreferrer">
+      <a href={obj.url} target="_blank" rel="noreferrer noopener">
         {obj.text ? obj.text : ''}
       </a>
     );
@@ -165,6 +148,7 @@ export default function Card({ card, cardsGroup = [], index = 0, targetClass, on
     <CustomTag
       href={card.action === 'link' ? card.url : undefined}
       target="_blank"
+      rel="noreferrer noopener"
       className={clsx('card', `type__${card.type}`, card.action ? `has-${card.action}` : '')}
       onClick={card.action === 'next-link' ? () => navigateOnCardClick(card) : undefined}
     >

@@ -25,10 +25,6 @@
           "url": "/community/help-and-support"
         },
         {
-          "text": "Contact Us",
-          "url": "/community/help-and-support/"
-        },
-        {
           "text": "Terms of Use",
           "url": "/terms"
         },
@@ -66,13 +62,6 @@
     "copyright": {
       "left": {
         "text": "2022 Protocol Labs"
-      },
-      "right": {
-        "text": "Want more free storage?",
-        "link": {
-          "text": "Submit a request",
-          "url": "https://web3.storage/account"
-        }
       }
     }
   }

@@ -40,20 +40,29 @@
 @import '../components/scroll2top/scroll2top.scss';
 @import '../components/gradientbackground/gradientbackground.scss';
 @import '../components/tabs/tabs.scss';
+@import '../components/table/table.scss';
 @import '../components/callout/callout.scss';
+@import '../components/w3link_form/w3link_form.scss';
+@import '../components/w3link_gateway/w3link_gateway.scss';
+@import '../components/customStorageForm/customStorageForm.scss';
 @import '../components/search/search.scss';
 @import '../components/account/accountBlockedModal/accountBlockedModal.scss';
+@import '../components/accountPlansModal/accountPlansModal.scss';
 
 // Pages
 @import '../pages/index.scss';
 @import '../pages/pricing.scss';
-@import '../pages/about.scss';
 @import '../pages/faq.scss';
 @import '../pages/terms.scss';
+@import '../pages/sla.scss';
 @import '../pages/404.scss';
 @import '../pages/login';
 @import '../pages/account';
 @import '../pages/tokens';
+@import '../pages/products/w3name/index.scss';
+@import '../pages/products/w3link/index.scss';
+@import '../pages/products/web3storage/index.scss';
+@import '../pages/contact';
 
 // Fonts
 $fontAssetPath: '../assets/fonts';
@@ -124,7 +133,6 @@ body {
   font-size: 16px;
   font-weight: $fontWeight_Regular;
   line-height: $leading_Regular;
-  letter-spacing: $letterSpacing_Large;
   color: $ebony;
   @include background_Light;
   -moz-osx-font-smoothing: grayscale;
@@ -246,6 +254,25 @@ h5,
 .table-heading {
   padding: 0 2rem 2rem;
   font-size: 1.875rem;
+}
+
+.app-back-link {
+  font-size: 14px;
+  position: absolute;
+  left: 2rem;
+  top: 0;
+  color: rgba($color: #fff, $alpha: 0.5);
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  &:before {
+    content: '←';
+    margin-top: -2px;
+  }
+
+  @media screen and (max-width: 960px) {
+    position: relative;
+  }
 }
 
 // Components

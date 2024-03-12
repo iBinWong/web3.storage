@@ -22,6 +22,21 @@ export class HTTPError extends Error {
   }
 }
 
+export class PinningServiceApiError extends Error {
+  /**
+   *
+   * @param {string} [message]
+   * @param {number} [status]
+   * @param {string} code
+   */
+  constructor (message, status = 400, code = 'PSA_ERROR') {
+    super(message)
+    this.details = message
+    this.status = status
+    this.reason = code
+  }
+}
+
 export class UserNotFoundError extends HTTPError {
   constructor (msg = 'No user found for user token') {
     super(msg, 401)
@@ -31,11 +46,10 @@ export class UserNotFoundError extends HTTPError {
 }
 UserNotFoundError.CODE = 'ERROR_USER_NOT_FOUND'
 
-export class PinningUnauthorizedError extends HTTPError {
-  constructor (msg = 'Pinning not authorized for this user, email support@web3.storage to request authorization.') {
+export class PinningUnauthorizedError extends PinningServiceApiError {
+  constructor (msg = 'Pinning not authorized for this user, please visit https://web3.storage/docs/how-tos/pinning-services-api/ for instructions on how to request access.') {
     super(msg, 403)
-    this.name = 'PinningUnauthorizedError'
-    this.code = PinningUnauthorizedError.CODE
+    this.reason = PinningUnauthorizedError.CODE
   }
 }
 PinningUnauthorizedError.CODE = 'ERROR_PINNING_UNAUTHORIZED'
@@ -103,6 +117,43 @@ export class MagicTokenRequiredError extends HTTPError {
 }
 MagicTokenRequiredError.CODE = 'ERROR_MAGIC_TOKEN_REQUIRED'
 
+/**
+ * Error indicating a new user signup was denied and probably will be indefinitely,
+ * and the user should try a new product instead.
+ */
+export class NewUserDeniedTryOtherProductError extends HTTPError {
+  /**
+   * @param {string} message
+   * @param {URL} otherProduct
+   */
+  constructor (message, otherProduct) {
+    super(message, 403)
+    this.code = 'NEW_USER_DENIED_TRY_OTHER_PRODUCT'
+    this.otherProduct = otherProduct
+  }
+
+  toJSON () {
+    return {
+      message: this.message,
+      code: this.code,
+      otherProduct: this.otherProduct.toString()
+    }
+  }
+}
+
+export class AgreementsRequiredError extends HTTPError {
+  /**
+   * @param {import("./utils/billing-types").Agreement[]} agreements
+   * @param {string} message
+   */
+  constructor (agreements, message = `Missing required agreements ${agreements.join(', ')}`) {
+    super(message, 400)
+    this.name = 'AgreementRequired'
+    this.code = AgreementsRequiredError.CODE
+  }
+}
+AgreementsRequiredError.CODE = 'AGREEMENTS_REQUIRED'
+
 export class InvalidCidError extends Error {
   /**
    * @param {string} cid
@@ -142,20 +193,23 @@ export class MaintenanceError extends Error {
 }
 MaintenanceError.CODE = 'ERROR_MAINTENANCE'
 
-export class PinningServiceApiError extends Error {
+export class FeatureHasBeenSunsetError extends Error {
   /**
-   *
-   * @param {string} [message]
-   * @param {number} [status]
-   * @param {string} code
+   * @param {string} reason
    */
-  constructor (message, status = 400, code = 'PSA_ERROR') {
-    super(message)
-    this.details = message
-    this.status = status
-    this.reason = code
+  constructor (reason) {
+    super(reason)
+    this.name = 'FeatureHasBeenSunset'
+    /**
+     * The 410 (Gone) status code indicates that access to the target resource
+     * is no longer available at the origin server and that this condition is likely
+     * to be permanent.
+     */
+    this.status = 410 // Gone
+    this.code = FeatureHasBeenSunsetError.CODE
   }
 }
+FeatureHasBeenSunsetError.CODE = 'ERROR_FEATURE_HAS_BEEN_SUNSET'
 
 export class PSAErrorInvalidData extends PinningServiceApiError {
   /**
@@ -206,3 +260,40 @@ export class PSAErrorDB extends PinningServiceApiError {
   }
 }
 PSAErrorDB.CODE = 'PSA_DB_ERROR'
+
+export class PSACodecNotSupported extends PinningServiceApiError {
+  /**
+   * @param {string} message
+   */
+  constructor (message = PSACodecNotSupported.MESSAGE) {
+    super(message)
+    this.details = message
+    this.status = 400
+    this.reason = PSACodecNotSupported.CODE
+  }
+}
+PSACodecNotSupported.CODE = 'PSA_CODEC_ERROR'
+PSACodecNotSupported.MESSAGE = 'IPLD codec not supported. The API supports raw, dag-pb, dag-cbor, dag-json.'
+
+export class RangeNotSatisfiableError extends HTTPError {
+  constructor (msg = 'Range Not Satisfiable') {
+    super(msg, 416)
+    this.name = 'RangeNotSatisfiableError'
+    this.code = RangeNotSatisfiableError.CODE
+  }
+}
+RangeNotSatisfiableError.CODE = 'ERROR_RANGE_NOT_SATISFIABLE'
+
+export class LinkdexError extends Error {
+  /**
+   * @param {number} status
+   * @param {number} statusText
+   */
+  constructor (status, statusText) {
+    super(`linkdex-api not ok: ${status} ${statusText}`)
+    this.name = 'LinkdexError'
+    this.status = status
+    this.code = LinkdexError.CODE
+  }
+}
+LinkdexError.CODE = 'LINKDEX_NOT_OK'

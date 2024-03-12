@@ -6,9 +6,10 @@ import {
   normalizePins,
   normalizeDeals,
   normalizePsaPinRequest,
-  parseTextToNumber
+  parseTextToNumber,
+  safeNumber
 } from './utils.js'
-import { ConstraintError, DBError } from './errors.js'
+import { ConstraintError, DBError, RangeNotSatisfiableDBError } from './errors.js'
 
 export { EMAIL_TYPE } from './constants.js'
 export { parseTextToNumber } from './utils.js'
@@ -20,6 +21,8 @@ const uploadQuery = `
         sourceCid:source_cid,
         created:inserted_at,
         updated:updated_at,
+        backupUrls:backup_urls,
+        backup( url ),
         content(cid, dagSize:dag_size, pins:pin(status, updated:updated_at, location:pin_location(_id:id, peerId:peer_id, peerName:peer_name, ipfsPeerId:ipfs_peer_id, region)))
       `
 
@@ -106,29 +109,22 @@ export class DBClient {
   async upsertUser (user) {
     /** @type {{ data: definitions['user'], error: PostgrestError }} */
     const { data, error } = await this._client
-      .from('user')
-      .upsert(
-        {
-          id: user.id,
-          name: user.name,
-          picture: user.picture,
-          email: user.email,
-          issuer: user.issuer,
-          github: user.github,
-          public_address: user.publicAddress
-        },
-        {
-          onConflict: 'issuer'
-        }
-      )
-      .single()
-
+      .rpc('upsert_user', {
+        _name: user.name,
+        _picture: user.picture ?? '',
+        _email: user.email,
+        _issuer: user.issuer,
+        _github: user.github ?? '',
+        _public_address: user.publicAddress
+      })
     if (error) {
       throw new DBError(error)
     }
-
+    const userData = data[0]
     return {
-      issuer: data.issuer
+      id: userData.id,
+      inserted: userData.inserted,
+      issuer: userData.issuer
     }
   }
 
@@ -229,36 +225,23 @@ export class DBClient {
     requestedTagValue,
     userProposalForm
   ) {
-    const { data: deleteData, status: deleteStatus } = await this._client
+    const { error: insertError, status: insertStatus } = await this._client
       .from('user_tag_proposal')
-      .update({
-        deleted_at: new Date().toISOString()
+      .insert({
+        user_id: userId,
+        tag: tagName,
+        proposed_tag_value: requestedTagValue,
+        inserted_at: new Date().toISOString(),
+        user_proposal_form: userProposalForm
       })
-      .match({ user_id: userId, tag: tagName })
-      .is('deleted_at', null)
+      .single()
 
-    if (
-      deleteStatus === 200 ||
-      ((deleteStatus === 406 || deleteStatus === 404) && !deleteData)
-    ) {
-      const { error: insertError, status: insertStatus } = await this._client
-        .from('user_tag_proposal')
-        .insert({
-          user_id: userId,
-          tag: tagName,
-          proposed_tag_value: requestedTagValue,
-          inserted_at: new Date().toISOString(),
-          user_proposal_form: userProposalForm
-        })
-        .single()
+    if (insertError) {
+      throw new DBError(insertError)
+    }
 
-      if (insertError) {
-        throw new DBError(insertError)
-      }
-
-      if (insertStatus === 201) {
-        return true
-      }
+    if (insertStatus === 201) {
+      return true
     }
 
     return false
@@ -336,19 +319,28 @@ export class DBClient {
    * @returns {Promise<import('./db-client-types').StorageUsedOutput>}
    */
   async getStorageUsed (userId) {
-    /** @type {{ data: { uploaded: string, psa_pinned: string, total: string }, error: PostgrestError }} */
-    const { data, error } = await this._client
-      .rpc('user_used_storage', { query_user_id: userId })
-      .single()
+    const [userUploadedResponse, psaPinnedResponse] = await Promise.all([
+      this._client
+        .rpc('user_uploaded_storage', { query_user_id: userId })
+        .single(),
+      this._client
+        .rpc('user_psa_storage', { query_user_id: userId })
+        .single()
+    ])
 
-    if (error) {
-      throw new DBError(error)
+    if (userUploadedResponse.error) {
+      throw new DBError(userUploadedResponse.error)
+    } else if (psaPinnedResponse.error) {
+      throw new DBError(psaPinnedResponse.error)
     }
 
+    const uploaded = parseTextToNumber(userUploadedResponse.data)
+    const psaPinned = parseTextToNumber(psaPinnedResponse.data)
+
     return {
-      uploaded: parseTextToNumber(data.uploaded),
-      psaPinned: parseTextToNumber(data.psa_pinned),
-      total: parseTextToNumber(data.total)
+      uploaded,
+      psaPinned,
+      total: safeNumber(uploaded + psaPinned)
     }
   }
 
@@ -516,41 +508,47 @@ export class DBClient {
    * List uploads of a given user.
    *
    * @param {number} userId
-   * @param {import('./db-client-types').ListUploadsOptions} [opts]
-   * @returns {import('./db-client-types').ListUploadReturn}
+   * @param {import('./index').PageRequest} pageRequest
+   * @returns {Promise<import('./db-client-types').ListUploadReturn>}
    */
-  async listUploads (userId, opts = {}) {
-    const rangeFrom = opts.offset || 0
-    const rangeTo = rangeFrom + (opts.size || 25)
-    const isAscendingSortOrder = opts.sortOrder === 'Asc'
-    const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
-    const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === opts.sortBy)
-    const sortBy = sortByColumn || defaultSortByColumn
+  async listUploads (userId, pageRequest) {
+    const size = pageRequest.size || 25
+    let query
+    if ('before' in pageRequest) {
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .lt('inserted_at', pageRequest.before.toISOString())
+        .order('inserted_at', { ascending: false })
+        .range(0, size - 1)
+    } else if ('page' in pageRequest) {
+      const rangeFrom = (pageRequest.page - 1) * size
+      const rangeTo = rangeFrom + size
+      const isAscendingSortOrder = pageRequest.sortOrder === 'Asc'
+      const defaultSortByColumn = Object.keys(sortableColumnToUploadArgMap)[0]
+      const sortByColumn = Object.keys(sortableColumnToUploadArgMap).find(key => sortableColumnToUploadArgMap[key] === pageRequest.sortBy)
+      const sortBy = sortByColumn || defaultSortByColumn
 
-    let query = this._client
-      .from('upload')
-      .select(uploadQuery, { count: 'exact' })
-      .eq('user_id', userId)
-      .is('deleted_at', null)
-      .order(
-        sortBy,
-        { ascending: isAscendingSortOrder }
-      )
-
-    // Apply filtering
-    if (opts.before) {
-      query = query.lt('inserted_at', opts.before)
+      query = this._client
+        .from('upload')
+        .select(uploadQuery, { count: 'exact' })
+        .eq('user_id', userId)
+        .is('deleted_at', null)
+        .order(sortBy, { ascending: isAscendingSortOrder })
+        .range(rangeFrom, rangeTo - 1)
+    } else {
+      throw new Error('unknown page request type')
     }
 
-    if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+    const { data: uploads, error, count, status } = await query
+
+    // For some reason, error comes back as empty array when out of range.
+    // (416 = Range Not Satisfiable)
+    if (status === 416) {
+      throw new RangeNotSatisfiableDBError()
     }
-
-    // Apply pagination or limiting.
-    query = query.range(rangeFrom, rangeTo - 1)
-
-    /** @type {{ data: Array<import('./db-client-types').UploadItem>, error: Error, count: Number }} */
-    const { data: uploads, error, count } = await query
 
     if (error) {
       throw new DBError(error)
@@ -559,7 +557,6 @@ export class DBClient {
     // Get deals
     const cids = uploads?.map((u) => u.content.cid)
     const deals = await this.getDealsForCids(cids)
-
     return {
       count,
       uploads: uploads?.map((u) => ({
@@ -791,51 +788,6 @@ export class DBClient {
   }
 
   /**
-   * Get All Pin requests.
-   *
-   * @param {Object} [options]
-   * @param {number} [options.size = 600]
-   * @return {Promise<Array<import('./db-client-types').PinRequestItemOutput>>}
-   */
-  async getPinRequests ({ size = 600 } = {}) {
-    /** @type {{ data: Array<import('./db-client-types').PinRequestItemOutput>, error: PostgrestError }} */
-    const { data: pinReqs, error } = await this._client
-      .from('pin_request')
-      .select(
-        `
-        _id:id::text,
-        cid:content_cid,
-        created:inserted_at
-      `
-      )
-      .limit(size)
-
-    if (error) {
-      throw new DBError(error)
-    }
-
-    return pinReqs
-  }
-
-  /**
-   * Delete pin requests with provided ids.
-   *
-   * @param {Array<number>} ids
-   * @return {Promise<void>}
-   */
-  async deletePinRequests (ids) {
-    /** @type {{ error: PostgrestError }} */
-    const { error } = await this._client
-      .from('pin_request')
-      .delete()
-      .in('id', ids)
-
-    if (error) {
-      throw new DBError(error)
-    }
-  }
-
-  /**
    * Create pin sync requests.
    *
    * @param {Array<number>} pinSyncRequests
@@ -1045,31 +997,37 @@ export class DBClient {
     }
   }
 
+  /**
+   * Check if given token has a blocked status.
+   *
+   * @param {{ _id: string }} token
+   */
   async checkIsTokenBlocked (token) {
     const { data, error } = await this._client
       .from('auth_key_history')
       .select('status')
       .filter('deleted_at', 'is', null)
       .eq('auth_key_id', token._id)
-      .single()
 
     if (error) {
       throw new DBError(error)
     }
 
-    return data?.status === 'Blocked'
+    return data?.[0]?.status === 'Blocked'
   }
 
   /**
    * List auth keys of a given user.
    *
-   * @param {number} userId
+   * @param {string} userId
+   * @param {import('./db-client-types').ListKeysOptions} opts
    * @return {Promise<Array<import('./db-client-types').AuthKeyItemOutput>>}
    */
-  async listKeys (userId) {
+  async listKeys (userId, { includeDeleted } = { includeDeleted: false }) {
     /** @type {{ error: PostgrestError, data: Array<import('./db-client-types').AuthKeyItem> }} */
     const { data, error } = await this._client.rpc('user_auth_keys_list', {
-      query_user_id: userId
+      query_user_id: userId,
+      include_deleted: includeDeleted
     })
 
     if (error) {
@@ -1210,30 +1168,50 @@ export class DBClient {
   /**
    * Get a filtered list of pin requests for a user
    *
-   * @param {string} authKey
+   * @param {string | [string]} authKey
    * @param {import('./db-client-types').ListPsaPinRequestOptions} [opts]
    * @return {Promise<import('./db-client-types').ListPsaPinRequestResults> }> }
    */
   async listPsaPinRequests (authKey, opts = {}) {
     const match = opts?.match || 'exact'
     const limit = opts?.limit || 10
+    /**
+     * @type {Array.<string>|undefined}
+     */
+    let statuses
 
     let query = this._client
       .from(psaPinRequestTableName)
       .select(listPinsQuery, {
         count: 'exact'
       })
-      .eq('auth_key_id', authKey)
       .is('deleted_at', null)
       .limit(limit)
       .order('inserted_at', { ascending: false })
 
-    if (!opts.cid && !opts.name && !opts.statuses) {
-      query = query.eq('content.pins.status', 'Pinned')
+    if (Array.isArray(authKey)) {
+      query.in('auth_key_id', authKey)
+    } else {
+      query.eq('auth_key_id', authKey)
     }
 
-    if (opts.statuses) {
-      query = query.in('content.pins.status', opts.statuses)
+    if (opts.offset) {
+      const rangeFrom = opts.offset || 0
+      const rangeTo = rangeFrom + limit
+      query = query.range(rangeFrom, rangeTo - 1)
+    }
+
+    // If not specified we default to pinned only if no other filters are provided.
+    // While slightly inconsistent, that's the current expectation.
+    // This is being discussed in https://github.com/ipfs-shipyard/pinning-service-compliance/issues/245
+    if (!opts.cid && !opts.name && !opts.meta && !opts.statuses) {
+      statuses = ['Pinned']
+    } else {
+      statuses = opts.statuses
+    }
+
+    if (statuses) {
+      query = query.in('content.pins.status', statuses)
     }
 
     if (opts.cid) {
@@ -1258,11 +1236,11 @@ export class DBClient {
     }
 
     if (opts.before) {
-      query = query.lte('inserted_at', opts.before)
+      query = query.lt('inserted_at', opts.before)
     }
 
     if (opts.after) {
-      query = query.gte('inserted_at', opts.after)
+      query = query.gt('inserted_at', opts.after)
     }
 
     if (opts.meta) {
@@ -1292,9 +1270,9 @@ export class DBClient {
    * Delete a user PA pin request.
    *
    * @param {number} requestId
-   * @param {string} authKey
+   * @param {string[]} authKeys
    */
-  async deletePsaPinRequest (requestId, authKey) {
+  async deletePsaPinRequest (requestId, authKeys) {
     const date = new Date().toISOString()
     /** @type {{ data: import('./db-client-types').PsaPinRequestItem, error: PostgrestError }} */
     const { data, error } = await this._client
@@ -1303,7 +1281,8 @@ export class DBClient {
         deleted_at: date,
         updated_at: date
       })
-      .match({ auth_key_id: authKey, id: requestId })
+      .match({ id: requestId })
+      .in('auth_key_id', authKeys)
       .filter('deleted_at', 'is', null)
       .single()
 
@@ -1317,47 +1296,68 @@ export class DBClient {
   }
 
   /**
-   * Get the raw IPNS record for a given key.
-   *
-   * @param {string} key
+   * Set the customerId that corresponds to a particular userId.
+   * The Customer ID may be a stripe.com customer id (not a foreign key within this db)
+   * @param {string} userId
+   * @param {string} customerId
    */
-  async resolveNameRecord (key) {
-    /** @type {{ error: Error, data: Array<import('./db-client-types').NameItem> }} */
+  async upsertUserCustomer (userId, customerId) {
     const { data, error } = await this._client
-      .from('name')
-      .select('record')
-      .match({ key })
-
+      .from('user_customer')
+      .upsert(
+        {
+          user_id: userId,
+          customer_id: customerId
+        },
+        {
+          onConflict: 'user_id'
+        }
+      )
+      .single()
     if (error) {
       throw new DBError(error)
     }
-
-    return data.length ? data[0].record : undefined
+    return {
+      _id: data.id
+    }
   }
 
   /**
-   * Publish a new IPNS record, ensuring the sequence number is greater than
-   * the sequence number of an existing record for the given key.
-   *
-   * @param {string} key
-   * @param {string} record Base 64 encoded serialized IPNS record.
-   * @param {boolean} hasV2Sig If the record has a v2 signature.
-   * @param {bigint} seqno Sequence number from the record.
-   * @param {bigint} validity Validity from the record in nanoseconds since 00:00, Jan 1 1970 UTC.
+   * @param {string} userId
+   * @param {import('./db-client-types').AgreementKind} agreement
+   * @returns {Promise<void>}
    */
-  async publishNameRecord (key, record, hasV2Sig, seqno, validity) {
-    const { error } = await this._client.rpc('publish_name_record', {
-      data: {
-        key,
-        record,
-        has_v2_sig: hasV2Sig,
-        seqno: seqno.toString(),
-        validity: validity.toString()
-      }
-    })
+  async createUserAgreement (userId, agreement) {
+    const { error } = await this._client
+      .from('agreement')
+      .insert({
+        user_id: userId,
+        agreement
+      })
+      .single()
 
     if (error) {
       throw new DBError(error)
     }
+  }
+
+  /**
+   * Get the Customer for a user
+   * @param {string} userId
+   * @returns {null|{ id: string }} customer
+   */
+  async getUserCustomer (userId) {
+    const { data, error } = await this._client
+      .from('user_customer')
+      .select(['customer_id'].join(','))
+      .eq('user_id', userId)
+    if (error) {
+      throw new DBError(error)
+    }
+    if (Array.isArray(data) && data.length === 0) {
+      return null
+    }
+    const customer = { id: data[0].customer_id }
+    return customer
   }
 }

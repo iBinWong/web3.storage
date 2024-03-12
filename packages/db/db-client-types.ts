@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { definitions } from './postgres/pg-rest-api-types'
 
 // User
@@ -12,6 +13,9 @@ export type UpsertUserInput = {
 }
 
 export type UpsertUserOutput = {
+  id: string
+  // whether the upsert inserted a new record (if falsy, it was updated)
+  inserted: boolean
   issuer: string
 }
 
@@ -91,9 +95,9 @@ export type PinItem = PinUpsertInput & {
 }
 
 export type PinsUpsertInput = {
-  id: string
+  id?: string
   status: definitions['pin']['status']
-  contentCid: definitions['pin_request']['content_cid']
+  contentCid: definitions['pin']['content_cid']
   location: Location
 }
 
@@ -105,12 +109,6 @@ export type PinItemOutput = {
   peerId: definitions['pin_location']['peer_id']
   peerName: definitions['pin_location']['peer_name']
   region: definitions['pin_location']['region']
-}
-
-export type PinRequestItemOutput = {
-  _id: string
-  cid: definitions['pin_request']['content_cid']
-  created: definitions['pin_request']['inserted_at']
 }
 
 export type PinSyncRequestItem = {
@@ -208,6 +206,7 @@ export type UploadItem = {
   created?: definitions['upload']['inserted_at']
   updated?: definitions['upload']['updated_at']
   content: ContentItem
+  backupUrls: definitions['upload']['backup_urls']
 }
 
 export type UploadItemOutput = {
@@ -220,6 +219,11 @@ export type UploadItemOutput = {
   dagSize?: definitions['content']['dag_size']
   pins: Array<PinItemOutput>,
   deals: Array<Deal>
+  /**
+   * the graph from `cid` can be recreated from the blocks in these parts
+   * @see https://github.com/web3-storage/content-claims#partition-claim
+   */
+  parts: Array<string>
 }
 
 export type UploadOutput = definitions['upload'] & {
@@ -241,41 +245,14 @@ export type Location = {
   region?: definitions['pin_location']['region']
 }
 
-export type ListUploadsOptions = {
-  /**
-   * Uploads created before a given timestamp.
-   */
-  before?: string
-  /**
-   * Uploads created after a given timestamp.
-   */
-  after?: string
-  /**
-   * Max records (default: 10).
-   */
-  size?: number
-  /**
-   * Offset records (default: 0).
-   */
-  offset?: number
-  /**
-   * Sort by given property.
-   */
-  sortBy?: 'Date' | 'Name'
-  /**
-   * Sort order.
-   */
-  sortOrder?: 'Asc' | 'Desc'
-}
-
 export type ListUploadReturn = {
   count: number,
-  uploads: Promise<UploadItemOutput[]>,
+  uploads: UploadItemOutput[],
 }
 
 // Pinning
 
-// PinRequest
+// PsaPinRequest
 export type PsaPinRequestUpsertInput = {
   id?: string,
   name?: definitions['psa_pin_request']['name'],
@@ -382,3 +359,8 @@ export type LogEmailSentInput = {
   emailType: string,
   messageId: string
 }
+
+export type ListKeysOptions = {
+  includeDeleted: boolean
+}
+export type AgreementKind = 'web3.storage-tos-v1'

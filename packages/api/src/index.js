@@ -7,7 +7,23 @@ import { envAll } from './env.js'
 import { statusGet } from './status.js'
 import { carHead, carGet, carPut, carPost } from './car.js'
 import { uploadPost } from './upload.js'
-import { userLoginPost, userTokensPost, userTokensGet, userTokensDelete, userUploadsGet, userUploadsDelete, userAccountGet, userUploadsRename, userInfoGet, userRequestPost } from './user.js'
+import {
+  userAccountGet,
+  userInfoGet,
+  userLoginPost,
+  userPaymentGet,
+  userPaymentPut,
+  userPinsGet,
+  userRequestPost,
+  userTokensDelete,
+  userTokensGet,
+  userTokensPost,
+  userUploadsDelete,
+  userUploadGet,
+  userUploadsGet,
+  userUploadsRename,
+  userPinDelete
+} from './user.js'
 import { pinDelete, pinGet, pinPost, pinsGet } from './pins.js'
 import { blogSubscriptionCreate } from './blog.js'
 import { metricsGet } from './metrics.js'
@@ -18,7 +34,6 @@ import {
   READ_WRITE
 } from './maintenance.js'
 import { notFound } from './utils/json-response.js'
-import { nameGet, nameWatchGet, namePost } from './name.js'
 import { compose } from './utils/fn.js'
 
 const router = Router()
@@ -76,16 +91,13 @@ router.post('/car',                 auth['🔑'](carPost))
 router.put('/car/:cid',             auth['🔑'](carPut))
 router.post('/upload',              auth['🔑'](uploadPost))
 router.get('/user/uploads',         auth['🔑⚠️'](userUploadsGet))
+router.get('/user/uploads/:cid',    auth['🔑⚠️'](userUploadGet))
 
 router.post('/pins',                auth['📌'](pinPost))
 router.post('/pins/:requestId',     auth['📌'](pinPost))
 router.get('/pins/:requestId',      auth['📌⚠️'](pinGet))
 router.get('/pins',                 auth['📌⚠️'](pinsGet))
 router.delete('/pins/:requestId',   auth['📌⚠️🗑️'](pinDelete))
-
-router.get('/name/:key',            auth['🌍'](nameGet))
-router.get('/name/:key/watch',      auth['🌍'](nameWatchGet))
-router.post('/name/:key',           auth['🔑'](namePost))
 
 router.post('/blog/subscription',   auth['🌍'](blogSubscriptionCreate))
 
@@ -97,6 +109,11 @@ router.post('/user/request',             auth['👤'](userRequestPost))
 router.delete('/user/tokens/:id',        auth['👤🗑️'](userTokensDelete))
 router.get('/user/account',              auth['👤'](userAccountGet))
 router.get('/user/info',                 auth['👤'](userInfoGet))
+router.get('/user/pins',                 auth['📌⚠️'](userPinsGet))
+router.delete('/user/pins/:requestId',   auth['👤🗑️'](userPinDelete))
+router.get('/user/payment',              auth['👤'](userPaymentGet))
+router.put('/user/payment',              auth['👤'](userPaymentPut))
+
 /* eslint-enable no-multi-spaces */
 
 // Monitoring
@@ -134,7 +151,7 @@ router.all('*', auth['🌍'](() => notFound()))
  * @param {import('./env').Env} env
  */
 function serverError (error, request, env) {
-  return addCorsHeaders(request, errorHandler(error, env))
+  return addCorsHeaders(request, errorHandler(error, env, request))
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/FetchEvent
@@ -147,11 +164,10 @@ export default {
       env = { ...env } // new env object for every request (it is shared otherwise)!
       response = await router.handle(request, env, ctx)
     } catch (error) {
+      // @ts-ignore
       response = serverError(error, request, env)
     }
     await env.log.end(response)
     return response
   }
 }
-
-export { NameRoom as NameRoom0 } from './name.js'

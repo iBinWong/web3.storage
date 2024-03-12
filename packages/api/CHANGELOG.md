@@ -1,5 +1,411 @@
 # Changelog
 
+## [7.25.0](https://github.com/web3-storage/web3.storage/compare/api-v7.24.0...api-v7.25.0) (2024-03-11)
+
+
+### Features
+
+* bump db package to 4.1.0 and use dep on that new version from cron, api packages ([#2362](https://github.com/web3-storage/web3.storage/issues/2362)) ([18af9c6](https://github.com/web3-storage/web3.storage/commit/18af9c673a7d600105796b271ee962e2865c1eeb))
+
+## [7.24.0](https://github.com/web3-storage/web3.storage/compare/api-v7.23.0...api-v7.24.0) (2024-01-22)
+
+
+### Features
+
+* listUploads includes parts property with list of links to CARs that contain it ([#2347](https://github.com/web3-storage/web3.storage/issues/2347)) ([b870346](https://github.com/web3-storage/web3.storage/commit/b87034604882252f314f9abfb96d347c30f17d25))
+
+## [7.23.0](https://github.com/web3-storage/web3.storage/compare/api-v7.22.0...api-v7.23.0) (2024-01-09)
+
+
+### Features
+
+* api maintenance message is a FeatureHasBeenSunsetError when env.MODE is READ_ONLY ([#2346](https://github.com/web3-storage/web3.storage/issues/2346)) ([8c29cec](https://github.com/web3-storage/web3.storage/commit/8c29cec0e7dda7ac06ffac0339a734f0b0151b91))
+
+## [7.22.0](https://github.com/web3-storage/web3.storage/compare/api-v7.21.0...api-v7.22.0) (2024-01-05)
+
+
+### Features
+
+* add README deprecation message ([#2340](https://github.com/web3-storage/web3.storage/issues/2340)) ([f3c661f](https://github.com/web3-storage/web3.storage/commit/f3c661f111d9b35dc8a133a6c1f9a10f3a861149))
+* bypass maintenance mode for allowed tokens ([#2345](https://github.com/web3-storage/web3.storage/issues/2345)) ([7ec85aa](https://github.com/web3-storage/web3.storage/commit/7ec85aa7902d2337baada4f9eec94c4dc4edf29a))
+
+## [7.21.0](https://github.com/web3-storage/web3.storage/compare/api-v7.20.0...api-v7.21.0) (2023-11-13)
+
+
+### Features
+
+* can disable new user registration at /user/login API around w3up launch by setting `NEXT_PUBLIC_W3UP_LAUNCH_LIMITED_AVAILABILITY_START` ([#2324](https://github.com/web3-storage/web3.storage/issues/2324)) ([09a59c6](https://github.com/web3-storage/web3.storage/commit/09a59c6d0590493b660b5a6c83ebc6829d52e733))
+
+## [7.20.0](https://github.com/web3-storage/web3.storage/compare/api-v7.19.0...api-v7.20.0) (2023-10-18)
+
+
+### Features
+
+* support multiple gateway URLs ([#2126](https://github.com/web3-storage/web3.storage/issues/2126)) ([415dcf6](https://github.com/web3-storage/web3.storage/commit/415dcf6f57bbf6e01253460778d3d9517d878f82))
+
+
+### Bug Fixes
+
+* use dag-staging gateway from staging api ([#2318](https://github.com/web3-storage/web3.storage/issues/2318)) ([943b4cd](https://github.com/web3-storage/web3.storage/commit/943b4cdcec524f21b4c0dc64cda5d6d21cbe156f))
+
+## [7.19.0](https://github.com/web3-storage/web3.storage/compare/api-v7.18.1...api-v7.19.0) (2023-07-31)
+
+
+### Features
+
+* write content claims ([#2291](https://github.com/web3-storage/web3.storage/issues/2291)) ([6a31c9b](https://github.com/web3-storage/web3.storage/commit/6a31c9b990d6600c910e9a77c39ce2b12311abab))
+
+
+### Bug Fixes
+
+* remove unnecessary compatibility flags ([#2301](https://github.com/web3-storage/web3.storage/issues/2301)) ([436cdb8](https://github.com/web3-storage/web3.storage/commit/436cdb82a88a3a253e5916a0dc4e1f6d34bacb89))
+* signer DID ([82c3462](https://github.com/web3-storage/web3.storage/commit/82c34620236dcc978dad2b13d1475f2451307c01))
+* this param for fetch calls ([#2292](https://github.com/web3-storage/web3.storage/issues/2292)) ([bf32c53](https://github.com/web3-storage/web3.storage/commit/bf32c53959d731ca567b109ab4d5fc73b4bbbfb7))
+* use error message value in cause ([9b07288](https://github.com/web3-storage/web3.storage/commit/9b072887557546cbdcd718ea138c08c6319cab35))
+
+## [7.18.1](https://github.com/web3-storage/web3.storage/compare/api-v7.18.0...api-v7.18.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* remove send to gendex queue ([#2287](https://github.com/web3-storage/web3.storage/issues/2287)) ([a2cf9fd](https://github.com/web3-storage/web3.storage/commit/a2cf9fd551343a943c1a481d29dd0457f51f1143))
+
+## [7.18.0](https://github.com/web3-storage/web3.storage/compare/api-v7.17.2...api-v7.18.0) (2023-06-27)
+
+
+### Features
+
+* re-enable queue push ([35b6bbd](https://github.com/web3-storage/web3.storage/commit/35b6bbd0d4db5462b21729d44b3be3e682cd10d1))
+
+## [7.17.2](https://github.com/web3-storage/web3.storage/compare/api-v7.17.1...api-v7.17.2) (2023-06-27)
+
+
+### Bug Fixes
+
+* really do not use the queue ([851560c](https://github.com/web3-storage/web3.storage/commit/851560c0296b93c493218bad3e26f3ae52655cad))
+
+## [7.17.1](https://github.com/web3-storage/web3.storage/compare/api-v7.17.0...api-v7.17.1) (2023-06-27)
+
+
+### Bug Fixes
+
+* only send to queue if configured ([f2b3d2c](https://github.com/web3-storage/web3.storage/commit/f2b3d2c6d467efe5bfae022e8f779511a886ccd4))
+* remove queue binding ([d945fc9](https://github.com/web3-storage/web3.storage/commit/d945fc97dca143635c41c3d7ab235ca7148ad314))
+
+## [7.17.0](https://github.com/web3-storage/web3.storage/compare/api-v7.16.1...api-v7.17.0) (2023-06-22)
+
+
+### Features
+
+* trigger block index creation ([#2279](https://github.com/web3-storage/web3.storage/issues/2279)) ([f058dcf](https://github.com/web3-storage/web3.storage/commit/f058dcf0226b08739393f7cb68762db6c0d3cc8e))
+
+## [7.16.1](https://github.com/web3-storage/web3.storage/compare/api-v7.16.0...api-v7.16.1) (2023-05-12)
+
+
+### Bug Fixes
+
+* dudewhere root cid should be content cid ([#2267](https://github.com/web3-storage/web3.storage/issues/2267)) ([2beaf4f](https://github.com/web3-storage/web3.storage/commit/2beaf4f211e19a62d5b00ffcbdfec817c60a37bf))
+
+## [7.16.0](https://github.com/web3-storage/web3.storage/compare/api-v7.15.4...api-v7.16.0) (2023-03-22)
+
+
+### Features
+
+* provide delegates on pin add response ([#2255](https://github.com/web3-storage/web3.storage/issues/2255)) ([5764145](https://github.com/web3-storage/web3.storage/commit/5764145230dcb5bb4c3cbcc0de54092e28dd31d2))
+
+## [7.15.4](https://github.com/web3-storage/web3.storage/compare/api-v7.15.3...api-v7.15.4) (2023-03-17)
+
+
+### Bug Fixes
+
+* update pin status from GET /pins even if failed ([#2235](https://github.com/web3-storage/web3.storage/issues/2235)) ([78bbcdb](https://github.com/web3-storage/web3.storage/commit/78bbcdb019458c13395f07b44c8804d5e16b9788))
+
+## [7.15.3](https://github.com/web3-storage/web3.storage/compare/api-v7.15.2...api-v7.15.3) (2023-03-15)
+
+
+### Bug Fixes
+
+* use car block validator ([#2241](https://github.com/web3-storage/web3.storage/issues/2241)) ([13fcc6c](https://github.com/web3-storage/web3.storage/commit/13fcc6c70e6f2af81e78f149c6e507109adc5563))
+
+## [7.15.2](https://github.com/web3-storage/web3.storage/compare/api-v7.15.1...api-v7.15.2) (2023-03-10)
+
+
+### Bug Fixes
+
+* stop creating a Stripe account during web3.storage account creation ([#2226](https://github.com/web3-storage/web3.storage/issues/2226)) ([425ac5c](https://github.com/web3-storage/web3.storage/commit/425ac5c0b6f92ffa038077b08237a4201dfa5615))
+
+## [7.15.1](https://github.com/web3-storage/web3.storage/compare/api-v7.15.0...api-v7.15.1) (2023-02-22)
+
+
+### Bug Fixes
+
+* include R2 key in error message ([#2219](https://github.com/web3-storage/web3.storage/issues/2219)) ([5a320f4](https://github.com/web3-storage/web3.storage/commit/5a320f4258c9c757075545762d0a65dbb602daaf))
+
+## [7.15.0](https://github.com/web3-storage/web3.storage/compare/api-v7.14.0...api-v7.15.0) (2023-02-21)
+
+
+### Features
+
+* recheck pin status on GET /pins/:req-id ([#2214](https://github.com/web3-storage/web3.storage/issues/2214)) ([91f067f](https://github.com/web3-storage/web3.storage/commit/91f067fabbea2403280b25cc555cd88fb062e201))
+
+## [7.14.0](https://github.com/web3-storage/web3.storage/compare/api-v7.13.1...api-v7.14.0) (2023-01-13)
+
+
+### Features
+
+* allow displaying of custom stripe prices ([#2152](https://github.com/web3-storage/web3.storage/issues/2152)) ([e3011be](https://github.com/web3-storage/web3.storage/commit/e3011bee166f762cefae40240be8ab46476aee33))
+* use pickup as `CLUSTER_API_URL` ([#2179](https://github.com/web3-storage/web3.storage/issues/2179)) ([e486a67](https://github.com/web3-storage/web3.storage/commit/e486a67ae5d49e42525cfeaf977fce166f3833ee))
+
+## [7.13.1](https://github.com/web3-storage/web3.storage/compare/api-v7.13.0...api-v7.13.1) (2023-01-04)
+
+
+### Bug Fixes
+
+* reject not supported codecs ([#2159](https://github.com/web3-storage/web3.storage/issues/2159)) ([811c1b1](https://github.com/web3-storage/web3.storage/commit/811c1b169d4833e2bb116fd869abb263fa833c02)), closes [#2154](https://github.com/web3-storage/web3.storage/issues/2154)
+
+## [7.13.0](https://github.com/web3-storage/web3.storage/compare/api-v7.12.0...api-v7.13.0) (2022-11-30)
+
+
+### Features
+
+* list and ability to delete psa request created though deleted tokens ([#2054](https://github.com/web3-storage/web3.storage/issues/2054)) ([e150d1f](https://github.com/web3-storage/web3.storage/commit/e150d1fa86dc0e6600f159fa92ccb7c8e65900e3))
+
+
+### Bug Fixes
+
+* allow update PSA pin requests with same CID ([#2125](https://github.com/web3-storage/web3.storage/issues/2125)) ([0013efd](https://github.com/web3-storage/web3.storage/commit/0013efdeebaa5af7e4f88daa7bf6e53d706622a8)), closes [#1547](https://github.com/web3-storage/web3.storage/issues/1547)
+* PSA compliance fixes ([#2091](https://github.com/web3-storage/web3.storage/issues/2091)) ([8b1c1d3](https://github.com/web3-storage/web3.storage/commit/8b1c1d3eca4a7ae5a557cb29d3f43f9d6ca29b9d)), closes [#1579](https://github.com/web3-storage/web3.storage/issues/1579)
+
+## [7.12.0](https://github.com/web3-storage/web3.storage/compare/api-v7.11.3...api-v7.12.0) (2022-11-11)
+
+
+### Features
+
+* logins of already-existing users result in the user's customer contact info being updated (e.g. in stripe.com dashboard) ([#2103](https://github.com/web3-storage/web3.storage/issues/2103)) ([a365b4c](https://github.com/web3-storage/web3.storage/commit/a365b4c732aea169f372276e40c8792e69bfde69))
+
+## [7.11.3](https://github.com/web3-storage/web3.storage/compare/api-v7.11.2...api-v7.11.3) (2022-11-01)
+
+
+### Bug Fixes
+
+* add api comment to trigger release on db change ([88042dd](https://github.com/web3-storage/web3.storage/commit/88042ddf1576cd9e04868b579e513fb2d9558b6a))
+
+## [7.11.2](https://github.com/web3-storage/web3.storage/compare/api-v7.11.1...api-v7.11.2) (2022-10-27)
+
+
+### Bug Fixes
+
+* dummy commit ([29f7751](https://github.com/web3-storage/web3.storage/commit/29f775105e65410be90c281517f4372c1e0ab45d))
+
+## [7.11.1](https://github.com/web3-storage/web3.storage/compare/api-v7.11.0...api-v7.11.1) (2022-10-27)
+
+
+### Bug Fixes
+
+* report carCid as string to sentry ([#2072](https://github.com/web3-storage/web3.storage/issues/2072)) ([5f55e32](https://github.com/web3-storage/web3.storage/commit/5f55e32d5e3c2943235157d91ddb5d143e711cf0))
+
+## [7.11.0](https://github.com/web3-storage/web3.storage/compare/api-v7.10.0...api-v7.11.0) (2022-10-27)
+
+
+### Features
+
+* add metadata to upload error reports ([#2070](https://github.com/web3-storage/web3.storage/issues/2070)) ([6d240b7](https://github.com/web3-storage/web3.storage/commit/6d240b78f69a32f406c0da92c9d4f352576fc2cb))
+
+
+### Other Changes
+
+* rm LINKDEX_URL from wrangler.toml ([#2023](https://github.com/web3-storage/web3.storage/issues/2023)) ([1341283](https://github.com/web3-storage/web3.storage/commit/13412839bd061bdb96b1f93ddd43d77ec34cc83d))
+
+## [7.10.0](https://github.com/web3-storage/web3.storage/compare/api-v7.9.1...api-v7.10.0) (2022-10-23)
+
+
+### Features
+
+* log terms of service acceptance ([#2028](https://github.com/web3-storage/web3.storage/issues/2028)) ([47c3540](https://github.com/web3-storage/web3.storage/commit/47c35400ae97e45d07d55e723355f139376233e6))
+
+## [7.9.1](https://github.com/web3-storage/web3.storage/compare/api-v7.9.0...api-v7.9.1) (2022-10-18)
+
+
+### Bug Fixes
+
+* issue with logging user being set to different value than underlying user.id bigint::text ([#2042](https://github.com/web3-storage/web3.storage/issues/2042)) ([9659ab0](https://github.com/web3-storage/web3.storage/commit/9659ab08bb99dbb1b42f7591488263a7cb0aaf1c))
+* update toucan-js and move to deps ([#2045](https://github.com/web3-storage/web3.storage/issues/2045)) ([9de591d](https://github.com/web3-storage/web3.storage/commit/9de591dcb13c04a32626505c9c1152adbc003d61))
+
+
+### Other Changes
+
+* use db ids > JS MAX_SAFE_INTEGER in test ([#2020](https://github.com/web3-storage/web3.storage/issues/2020)) ([6103e99](https://github.com/web3-storage/web3.storage/commit/6103e9954c2fa0ffb75b0f53e7eaa21812c924c4))
+
+## [7.9.0](https://github.com/web3-storage/web3.storage/compare/api-v7.8.3...api-v7.9.0) (2022-10-17)
+
+
+### Features
+
+* add SATNAV and DUDEWHERE index buckets ([#2035](https://github.com/web3-storage/web3.storage/issues/2035)) ([20243bb](https://github.com/web3-storage/web3.storage/commit/20243bb3a132d274b1c3c275e41021f31d8392e6))
+* display name and email in stripe ([#2010](https://github.com/web3-storage/web3.storage/issues/2010)) ([41c385a](https://github.com/web3-storage/web3.storage/commit/41c385a6d4ecdee40e599b1821de2b197b11cde0))
+
+
+### Other Changes
+
+* improve error handling upload script ([#1968](https://github.com/web3-storage/web3.storage/issues/1968)) ([a5e2373](https://github.com/web3-storage/web3.storage/commit/a5e2373a111fd57be84b6c2bf4ccb12500de4b0c)), closes [#1922](https://github.com/web3-storage/web3.storage/issues/1922)
+
+## [7.8.3](https://github.com/web3-storage/web3.storage/compare/api-v7.8.2...api-v7.8.3) (2022-10-10)
+
+
+### Bug Fixes
+
+* PSA instructions ([#1914](https://github.com/web3-storage/web3.storage/issues/1914)) ([10f94e2](https://github.com/web3-storage/web3.storage/commit/10f94e2b92f1f7acc89998f892468a65508e5b00))
+
+## [7.8.2](https://github.com/web3-storage/web3.storage/compare/api-v7.8.1...api-v7.8.2) (2022-10-03)
+
+
+### Bug Fixes
+
+* migrate upsert_user function to return id text instead of id bigint ([#1990](https://github.com/web3-storage/web3.storage/issues/1990)) ([8253e8c](https://github.com/web3-storage/web3.storage/commit/8253e8c1e0295e09b10e9609f65c988b7fef80f5))
+
+## [7.8.1](https://github.com/web3-storage/web3.storage/compare/api-v7.8.0...api-v7.8.1) (2022-09-30)
+
+
+### Bug Fixes
+
+* trigger release to pick up fix from [#1976](https://github.com/web3-storage/web3.storage/issues/1976) ([#1982](https://github.com/web3-storage/web3.storage/issues/1982)) ([27f2542](https://github.com/web3-storage/web3.storage/commit/27f25422f1f1d385c2c8691a96d7ac5f1b14da6a))
+
+## [7.8.0](https://github.com/web3-storage/web3.storage/compare/api-v7.7.1...api-v7.8.0) (2022-09-29)
+
+
+### Features
+
+* new users are initialized into free tier ([#1945](https://github.com/web3-storage/web3.storage/issues/1945)) ([ee67c35](https://github.com/web3-storage/web3.storage/commit/ee67c35c6b12a363140b79ea34835123ad76420c))
+
+## [7.7.1](https://github.com/web3-storage/web3.storage/compare/api-v7.7.0...api-v7.7.1) (2022-09-23)
+
+
+### Other Changes
+
+* report error cause to sentry ([#1925](https://github.com/web3-storage/web3.storage/issues/1925)) ([69653b7](https://github.com/web3-storage/web3.storage/commit/69653b7b691b586c0de70f2acc34abc0330eec90))
+
+## [7.7.0](https://github.com/web3-storage/web3.storage/compare/api-v7.6.0...api-v7.7.0) (2022-09-22)
+
+
+### Features
+
+* 1909 use stripe fixtures for website storage productprices ([#1920](https://github.com/web3-storage/web3.storage/issues/1920)) ([63d15ff](https://github.com/web3-storage/web3.storage/commit/63d15ff222ac39a59acf6380686fe0524e92a7b6))
+
+## [7.6.0](https://github.com/web3-storage/web3.storage/compare/api-v7.5.1...api-v7.6.0) (2022-09-20)
+
+
+### Features
+
+* I can choose a storage pricing tier (issue 1869) ([#1878](https://github.com/web3-storage/web3.storage/issues/1878)) ([58de180](https://github.com/web3-storage/web3.storage/commit/58de180300e72f7a79193657a7d995f0799bae28))
+* put write to cluster behind a flag ([#1785](https://github.com/web3-storage/web3.storage/issues/1785)) ([eae75d2](https://github.com/web3-storage/web3.storage/commit/eae75d2366d59b0cf16143723a5af6513d891f9e))
+* send timing info to logtail. Time r2 & s3. ([#1908](https://github.com/web3-storage/web3.storage/issues/1908)) ([8dff635](https://github.com/web3-storage/web3.storage/commit/8dff6354b6f5bccbe953443c445e472085b1309d))
+* use sha256 checksum for r2.put ([#1910](https://github.com/web3-storage/web3.storage/issues/1910)) ([d277ba0](https://github.com/web3-storage/web3.storage/commit/d277ba02b5d6cbb3e4065d1ecb5c516cf35cf976))
+
+
+### Other Changes
+
+* add a script that generates many uploads ([#1790](https://github.com/web3-storage/web3.storage/issues/1790)) ([e38b7a0](https://github.com/web3-storage/web3.storage/commit/e38b7a0689ae160a30ea6edd54e52376e81ebec9))
+* encode sha256 hash as hex for r2 put ([#1911](https://github.com/web3-storage/web3.storage/issues/1911)) ([3d66fa9](https://github.com/web3-storage/web3.storage/commit/3d66fa91d51a15f2cde075a51b06fc614be1c108))
+* silence logging debug statements in test/dev ([#1870](https://github.com/web3-storage/web3.storage/issues/1870)) ([a576131](https://github.com/web3-storage/web3.storage/commit/a576131c7e0aaaf4851a5844e2c7778fa77a343b))
+
+## [7.5.1](https://github.com/web3-storage/web3.storage/compare/api-v7.5.0...api-v7.5.1) (2022-09-09)
+
+
+### Bug Fixes
+
+* /account/payment tiny bugs - use env var on website, fix uncaught error when no default_payment_method in StripeBillingService ([#1871](https://github.com/web3-storage/web3.storage/issues/1871)) ([5965b82](https://github.com/web3-storage/web3.storage/commit/5965b8230c9d3310c700cc306bee8431c0102ab8))
+
+## [7.5.0](https://github.com/web3-storage/web3.storage/compare/api-v7.4.5...api-v7.5.0) (2022-09-09)
+
+
+### Features
+
+* issues/1779 - I can save my payment settings ([#1852](https://github.com/web3-storage/web3.storage/issues/1852)) ([a49e780](https://github.com/web3-storage/web3.storage/commit/a49e780a4c7c0a3680aa03239552b01f1fcf72ed))
+
+## [7.4.5](https://github.com/web3-storage/web3.storage/compare/api-v7.4.4...api-v7.4.5) (2022-09-08)
+
+
+### Bug Fixes
+
+* add a `/user/uploads/:cid` endpoint. ([#1530](https://github.com/web3-storage/web3.storage/issues/1530)) ([99654bc](https://github.com/web3-storage/web3.storage/commit/99654bcc668db016710a91e07901cd40b9a9995a))
+
+## [7.4.4](https://github.com/web3-storage/web3.storage/compare/api-v7.4.3...api-v7.4.4) (2022-09-07)
+
+
+### Bug Fixes
+
+* empty payload is client error ([#1854](https://github.com/web3-storage/web3.storage/issues/1854)) ([1613e4b](https://github.com/web3-storage/web3.storage/commit/1613e4b45cc59a4df36f52ebda8fe5930b035bbe))
+
+## [7.4.3](https://github.com/web3-storage/web3.storage/compare/api-v7.4.2...api-v7.4.3) (2022-09-06)
+
+
+### Bug Fixes
+
+* trigger release ([e4175a6](https://github.com/web3-storage/web3.storage/commit/e4175a667bc177eb807f5974d79381bf36a67aa5))
+
+## [7.4.2](https://github.com/web3-storage/web3.storage/compare/api-v7.4.1...api-v7.4.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* always retry s3 upload ([#1846](https://github.com/web3-storage/web3.storage/issues/1846)) ([a5fa72c](https://github.com/web3-storage/web3.storage/commit/a5fa72c8c9c99ebb524cd21d7572fdbf178747af))
+
+## [7.4.1](https://github.com/web3-storage/web3.storage/compare/api-v7.4.0...api-v7.4.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* sourcemap stacktraces in sentry ([#1838](https://github.com/web3-storage/web3.storage/issues/1838)) ([4de82b6](https://github.com/web3-storage/web3.storage/commit/4de82b6c721c87875cd11890979bd9deb211c746))
+* wrangler publish wildcard route with specified zone id ([#1843](https://github.com/web3-storage/web3.storage/issues/1843)) ([9ccacff](https://github.com/web3-storage/web3.storage/commit/9ccacff1183dee0eb8142d4bf65f224ac8a5b273))
+
+## [7.4.0](https://github.com/web3-storage/web3.storage/compare/api-v7.3.0...api-v7.4.0) (2022-08-31)
+
+
+### Features
+
+* account payments UI start ([#1767](https://github.com/web3-storage/web3.storage/issues/1767)) ([38f0088](https://github.com/web3-storage/web3.storage/commit/38f00887df1e22ddef7c76c51e9c68883ad80895))
+* add tsc checking to packages/api ([#1813](https://github.com/web3-storage/web3.storage/issues/1813)) ([b7cc6f7](https://github.com/web3-storage/web3.storage/commit/b7cc6f7a6eb9a11c6d1fa856a97d15a8b89bf10e))
+* drop name table & IPNS migration cron ([#1719](https://github.com/web3-storage/web3.storage/issues/1719)) ([0cdfad9](https://github.com/web3-storage/web3.storage/commit/0cdfad9f6baf4a1a356b8c6c8291e4bceb45aa17))
+* e2e test website accountPayment loggedIn, includes magic.link testMode support in test-e2e job only ([#1754](https://github.com/web3-storage/web3.storage/issues/1754)) ([6d6f92c](https://github.com/web3-storage/web3.storage/commit/6d6f92cb10552c149ebd1fcaedb2295cb661192c))
+
+
+### Bug Fixes
+
+* Return correct issuer from magic token in `tryMagicToken`. ([#1806](https://github.com/web3-storage/web3.storage/issues/1806)) ([0a10f46](https://github.com/web3-storage/web3.storage/commit/0a10f46d8d04c9babd2e16c9c7c6876c9934085d))
+* upload list pagination headers ([#1739](https://github.com/web3-storage/web3.storage/issues/1739)) ([2ffe6d7](https://github.com/web3-storage/web3.storage/commit/2ffe6d749628095a93d957836c6b4e8ad3b6acf9))
+
+## [7.3.0](https://github.com/web3-storage/web3.storage/compare/api-v7.2.0...api-v7.3.0) (2022-08-22)
+
+
+### Features
+
+* add to api GET /user/payment, add AuthorizationTestContext to encapsulate magic.link test bypass ([#1769](https://github.com/web3-storage/web3.storage/issues/1769)) ([7722acc](https://github.com/web3-storage/web3.storage/commit/7722acc91a5c105f4865b47861000147fb227f26))
+
+
+### Other Changes
+
+* remove /name API endpoints and storage ([#1686](https://github.com/web3-storage/web3.storage/issues/1686)) ([ab93278](https://github.com/web3-storage/web3.storage/commit/ab93278ebe0a9fadc53171a72237bfe3d4a5e32a))
+
+## [7.2.0](https://github.com/web3-storage/web3.storage/compare/api-v7.1.1...api-v7.2.0) (2022-08-17)
+
+
+### Features
+
+* New Users Pins Endpoint ([#1718](https://github.com/web3-storage/web3.storage/issues/1718)) ([0d8eb86](https://github.com/web3-storage/web3.storage/commit/0d8eb86862783006bdeed131c5099e3ca3ecfb5b))
+
+
+### Bug Fixes
+
+* stracktraces with wrangler no bundle ([#1731](https://github.com/web3-storage/web3.storage/issues/1731)) ([763442c](https://github.com/web3-storage/web3.storage/commit/763442cb985f5297f04b25f4451605ab38431e44))
+
+## [7.1.1](https://github.com/web3-storage/web3.storage/compare/api-v7.1.0...api-v7.1.1) (2022-08-12)
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* Make PSA Errors compliant ([#1710](https://github.com/web3-storage/web3.storage/issues/1710)) ([4080363](https://github.com/web3-storage/web3.storage/commit/4080363193893f8ce72d4cf28d8153e2f4faee14))
+
 ## [7.1.0](https://github.com/web3-storage/web3.storage/compare/api-v7.0.1...api-v7.1.0) (2022-07-07)
 
 

@@ -1,5 +1,4 @@
 import clsx from 'clsx';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 import TokenCreator from 'components/tokens/tokenCreator/tokenCreator';
@@ -9,6 +8,7 @@ import { useTokens } from 'components/contexts/tokensContext';
 import TokensData from '../../content/pages/app/tokens.json';
 import { useUser } from 'hooks/use-user';
 import PinningRequestModal from 'components/pinningRequestModal/pinningRequestModal';
+import GeneralPageData from '../../content/pages/general.json';
 
 const Tokens = () => {
   const { tokens, fetchDate, isFetchingTokens, getTokens } = useTokens();
@@ -42,7 +42,7 @@ const Tokens = () => {
           href={content.ui.return.url}
           variant={content.ui.return.theme}
         >
-          <Link href={content.ui.return.url}>{content.ui.return.text}</Link>
+          {content.ui.return.text}
         </Button>
         <div dangerouslySetInnerHTML={{ __html: content.ui.test_token }} className="testing-cta-container"></div>
       </div>
@@ -59,11 +59,13 @@ const Tokens = () => {
  * @returns {{ props: import('components/types').PageProps}}
  */
 export function getStaticProps() {
+  const crumbs = GeneralPageData.breadcrumbs;
   return {
     props: {
       title: TokensData.seo.title,
       redirectTo: '/login',
       isRestricted: true,
+      breadcrumbs: [crumbs.index, crumbs.tokens],
     },
   };
 }

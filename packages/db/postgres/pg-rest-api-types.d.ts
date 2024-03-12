@@ -18,6 +18,7 @@ export interface paths {
         query: {
           user_id?: parameters["rowFilter.admin_search.user_id"];
           email?: parameters["rowFilter.admin_search.email"];
+          github_id?: parameters["rowFilter.admin_search.github_id"];
           token?: parameters["rowFilter.admin_search.token"];
           token_id?: parameters["rowFilter.admin_search.token_id"];
           deleted_at?: parameters["rowFilter.admin_search.deleted_at"];
@@ -49,6 +50,102 @@ export interface paths {
         };
         /** Partial Content */
         206: unknown;
+      };
+    };
+  };
+  "/agreement": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.agreement.id"];
+          user_id?: parameters["rowFilter.agreement.user_id"];
+          agreement?: parameters["rowFilter.agreement.agreement"];
+          inserted_at?: parameters["rowFilter.agreement.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["agreement"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** agreement */
+          agreement?: definitions["agreement"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.agreement.id"];
+          user_id?: parameters["rowFilter.agreement.user_id"];
+          agreement?: parameters["rowFilter.agreement.agreement"];
+          inserted_at?: parameters["rowFilter.agreement.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.agreement.id"];
+          user_id?: parameters["rowFilter.agreement.user_id"];
+          agreement?: parameters["rowFilter.agreement.agreement"];
+          inserted_at?: parameters["rowFilter.agreement.inserted_at"];
+        };
+        body: {
+          /** agreement */
+          agreement?: definitions["agreement"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
       };
     };
   };
@@ -247,6 +344,102 @@ export interface paths {
         body: {
           /** auth_key_history */
           auth_key_history?: definitions["auth_key_history"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/backup": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["backup"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** backup */
+          backup?: definitions["backup"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.backup.id"];
+          upload_id?: parameters["rowFilter.backup.upload_id"];
+          url?: parameters["rowFilter.backup.url"];
+          inserted_at?: parameters["rowFilter.backup.inserted_at"];
+        };
+        body: {
+          /** backup */
+          backup?: definitions["backup"];
         };
         header: {
           /** Preference */
@@ -550,111 +743,6 @@ export interface paths {
       };
     };
   };
-  "/name": {
-    get: {
-      parameters: {
-        query: {
-          key?: parameters["rowFilter.name.key"];
-          record?: parameters["rowFilter.name.record"];
-          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
-          seqno?: parameters["rowFilter.name.seqno"];
-          validity?: parameters["rowFilter.name.validity"];
-          inserted_at?: parameters["rowFilter.name.inserted_at"];
-          updated_at?: parameters["rowFilter.name.updated_at"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["name"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** name */
-          name?: definitions["name"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          key?: parameters["rowFilter.name.key"];
-          record?: parameters["rowFilter.name.record"];
-          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
-          seqno?: parameters["rowFilter.name.seqno"];
-          validity?: parameters["rowFilter.name.validity"];
-          inserted_at?: parameters["rowFilter.name.inserted_at"];
-          updated_at?: parameters["rowFilter.name.updated_at"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          key?: parameters["rowFilter.name.key"];
-          record?: parameters["rowFilter.name.record"];
-          has_v2_sig?: parameters["rowFilter.name.has_v2_sig"];
-          seqno?: parameters["rowFilter.name.seqno"];
-          validity?: parameters["rowFilter.name.validity"];
-          inserted_at?: parameters["rowFilter.name.inserted_at"];
-          updated_at?: parameters["rowFilter.name.updated_at"];
-        };
-        body: {
-          /** name */
-          name?: definitions["name"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
   "/pin": {
     get: {
       parameters: {
@@ -844,105 +932,6 @@ export interface paths {
         body: {
           /** pin_location */
           pin_location?: definitions["pin_location"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-  };
-  "/pin_request": {
-    get: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pin_request.id"];
-          content_cid?: parameters["rowFilter.pin_request.content_cid"];
-          attempts?: parameters["rowFilter.pin_request.attempts"];
-          inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pin_request.updated_at"];
-          /** Filtering Columns */
-          select?: parameters["select"];
-          /** Ordering */
-          order?: parameters["order"];
-          /** Limiting and Pagination */
-          offset?: parameters["offset"];
-          /** Limiting and Pagination */
-          limit?: parameters["limit"];
-        };
-        header: {
-          /** Limiting and Pagination */
-          Range?: parameters["range"];
-          /** Limiting and Pagination */
-          "Range-Unit"?: parameters["rangeUnit"];
-          /** Preference */
-          Prefer?: parameters["preferCount"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: {
-          schema: definitions["pin_request"][];
-        };
-        /** Partial Content */
-        206: unknown;
-      };
-    };
-    post: {
-      parameters: {
-        body: {
-          /** pin_request */
-          pin_request?: definitions["pin_request"];
-        };
-        query: {
-          /** Filtering Columns */
-          select?: parameters["select"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** Created */
-        201: unknown;
-      };
-    };
-    delete: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pin_request.id"];
-          content_cid?: parameters["rowFilter.pin_request.content_cid"];
-          attempts?: parameters["rowFilter.pin_request.attempts"];
-          inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pin_request.updated_at"];
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferReturn"];
-        };
-      };
-      responses: {
-        /** No Content */
-        204: never;
-      };
-    };
-    patch: {
-      parameters: {
-        query: {
-          id?: parameters["rowFilter.pin_request.id"];
-          content_cid?: parameters["rowFilter.pin_request.content_cid"];
-          attempts?: parameters["rowFilter.pin_request.attempts"];
-          inserted_at?: parameters["rowFilter.pin_request.inserted_at"];
-          updated_at?: parameters["rowFilter.pin_request.updated_at"];
-        };
-        body: {
-          /** pin_request */
-          pin_request?: definitions["pin_request"];
         };
         header: {
           /** Preference */
@@ -1173,6 +1162,7 @@ export interface paths {
           source_cid?: parameters["rowFilter.upload.source_cid"];
           type?: parameters["rowFilter.upload.type"];
           name?: parameters["rowFilter.upload.name"];
+          backup_urls?: parameters["rowFilter.upload.backup_urls"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
           deleted_at?: parameters["rowFilter.upload.deleted_at"];
@@ -1233,6 +1223,7 @@ export interface paths {
           source_cid?: parameters["rowFilter.upload.source_cid"];
           type?: parameters["rowFilter.upload.type"];
           name?: parameters["rowFilter.upload.name"];
+          backup_urls?: parameters["rowFilter.upload.backup_urls"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
           deleted_at?: parameters["rowFilter.upload.deleted_at"];
@@ -1257,6 +1248,7 @@ export interface paths {
           source_cid?: parameters["rowFilter.upload.source_cid"];
           type?: parameters["rowFilter.upload.type"];
           name?: parameters["rowFilter.upload.name"];
+          backup_urls?: parameters["rowFilter.upload.backup_urls"];
           inserted_at?: parameters["rowFilter.upload.inserted_at"];
           updated_at?: parameters["rowFilter.upload.updated_at"];
           deleted_at?: parameters["rowFilter.upload.deleted_at"];
@@ -1387,6 +1379,99 @@ export interface paths {
       };
     };
   };
+  "/user_customer": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_customer.id"];
+          user_id?: parameters["rowFilter.user_customer.user_id"];
+          customer_id?: parameters["rowFilter.user_customer.customer_id"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["user_customer"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** user_customer */
+          user_customer?: definitions["user_customer"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_customer.id"];
+          user_id?: parameters["rowFilter.user_customer.user_id"];
+          customer_id?: parameters["rowFilter.user_customer.customer_id"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_customer.id"];
+          user_id?: parameters["rowFilter.user_customer.user_id"];
+          customer_id?: parameters["rowFilter.user_customer.customer_id"];
+        };
+        body: {
+          /** user_customer */
+          user_customer?: definitions["user_customer"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
   "/user_tag": {
     get: {
       parameters: {
@@ -1492,144 +1577,134 @@ export interface paths {
       };
     };
   };
-  "/rpc/upsert_pins": {
+  "/user_tag_proposal": {
+    get: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag_proposal.id"];
+          user_id?: parameters["rowFilter.user_tag_proposal.user_id"];
+          tag?: parameters["rowFilter.user_tag_proposal.tag"];
+          proposed_tag_value?: parameters["rowFilter.user_tag_proposal.proposed_tag_value"];
+          user_proposal_form?: parameters["rowFilter.user_tag_proposal.user_proposal_form"];
+          admin_decision_message?: parameters["rowFilter.user_tag_proposal.admin_decision_message"];
+          admin_decision_type?: parameters["rowFilter.user_tag_proposal.admin_decision_type"];
+          inserted_at?: parameters["rowFilter.user_tag_proposal.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag_proposal.deleted_at"];
+          /** Filtering Columns */
+          select?: parameters["select"];
+          /** Ordering */
+          order?: parameters["order"];
+          /** Limiting and Pagination */
+          offset?: parameters["offset"];
+          /** Limiting and Pagination */
+          limit?: parameters["limit"];
+        };
+        header: {
+          /** Limiting and Pagination */
+          Range?: parameters["range"];
+          /** Limiting and Pagination */
+          "Range-Unit"?: parameters["rangeUnit"];
+          /** Preference */
+          Prefer?: parameters["preferCount"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: {
+          schema: definitions["user_tag_proposal"][];
+        };
+        /** Partial Content */
+        206: unknown;
+      };
+    };
+    post: {
+      parameters: {
+        body: {
+          /** user_tag_proposal */
+          user_tag_proposal?: definitions["user_tag_proposal"];
+        };
+        query: {
+          /** Filtering Columns */
+          select?: parameters["select"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** Created */
+        201: unknown;
+      };
+    };
+    delete: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag_proposal.id"];
+          user_id?: parameters["rowFilter.user_tag_proposal.user_id"];
+          tag?: parameters["rowFilter.user_tag_proposal.tag"];
+          proposed_tag_value?: parameters["rowFilter.user_tag_proposal.proposed_tag_value"];
+          user_proposal_form?: parameters["rowFilter.user_tag_proposal.user_proposal_form"];
+          admin_decision_message?: parameters["rowFilter.user_tag_proposal.admin_decision_message"];
+          admin_decision_type?: parameters["rowFilter.user_tag_proposal.admin_decision_type"];
+          inserted_at?: parameters["rowFilter.user_tag_proposal.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag_proposal.deleted_at"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+    patch: {
+      parameters: {
+        query: {
+          id?: parameters["rowFilter.user_tag_proposal.id"];
+          user_id?: parameters["rowFilter.user_tag_proposal.user_id"];
+          tag?: parameters["rowFilter.user_tag_proposal.tag"];
+          proposed_tag_value?: parameters["rowFilter.user_tag_proposal.proposed_tag_value"];
+          user_proposal_form?: parameters["rowFilter.user_tag_proposal.user_proposal_form"];
+          admin_decision_message?: parameters["rowFilter.user_tag_proposal.admin_decision_message"];
+          admin_decision_type?: parameters["rowFilter.user_tag_proposal.admin_decision_type"];
+          inserted_at?: parameters["rowFilter.user_tag_proposal.inserted_at"];
+          deleted_at?: parameters["rowFilter.user_tag_proposal.deleted_at"];
+        };
+        body: {
+          /** user_tag_proposal */
+          user_tag_proposal?: definitions["user_tag_proposal"];
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferReturn"];
+        };
+      };
+      responses: {
+        /** No Content */
+        204: never;
+      };
+    };
+  };
+  "/rpc/upsert_user": {
     post: {
       parameters: {
         body: {
           args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_url": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/pgrst_watch": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_nil": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v1": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_content": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_oid": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/users_by_storage_used": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: integer */
-            to_percent?: number;
-            /** Format: integer */
-            from_percent: number;
-            /** Format: integer */
-            user_id_gt?: number;
-            /** Format: integer */
-            user_id_lte?: number;
+            /** Format: text */
+            _github: string;
+            /** Format: text */
+            _email: string;
+            /** Format: text */
+            _name: string;
+            /** Format: text */
+            _picture: string;
+            /** Format: text */
+            _issuer: string;
+            /** Format: text */
+            _public_address: string;
           };
         };
         header: {
@@ -1650,221 +1725,8 @@ export interface paths {
           args: {
             /** Format: bigint */
             query_user_id: number;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/find_deals_by_content_cids": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: text[] */
-            cids: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v5": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: uuid */
-            namespace: string;
-            /** Format: text */
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/upsert_pin": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_x500": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/json_arr_to_text_arr": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            _json: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/publish_name_record": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v3": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: uuid */
-            namespace: string;
-            /** Format: text */
-            name: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/create_key": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            data: string;
-          };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_generate_v4": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/uuid_ns_dns": {
-    post: {
-      parameters: {
-        body: {
-          args: { [key: string]: unknown };
-        };
-        header: {
-          /** Preference */
-          Prefer?: parameters["preferParams"];
-        };
-      };
-      responses: {
-        /** OK */
-        200: unknown;
-      };
-    };
-  };
-  "/rpc/json_arr_to_json_element_array": {
-    post: {
-      parameters: {
-        body: {
-          args: {
-            /** Format: json */
-            _json: string;
+            /** Format: boolean */
+            include_deleted?: boolean;
           };
         };
         header: {
@@ -1918,7 +1780,121 @@ export interface paths {
       };
     };
   };
+  "/rpc/json_arr_to_json_element_array": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_key": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/json_arr_to_text_arr": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            _json: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/user_uploaded_storage": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
   "/rpc/uuid_generate_v1mc": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v1": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v4": {
     post: {
       parameters: {
         body: {
@@ -1955,6 +1931,298 @@ export interface paths {
       };
     };
   };
+  "/rpc/upsert_pin": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/find_deals_by_content_cids": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text[] */
+            cids: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/users_by_storage_used": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: integer */
+            to_percent?: number;
+            /** Format: bigint */
+            user_id_gt?: number;
+            /** Format: integer */
+            from_percent: number;
+            /** Format: bigint */
+            user_id_lte?: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_url": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v5": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_content_with_pin_sync_request": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/create_content": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_oid": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/user_psa_storage": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: bigint */
+            query_user_id: number;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/pgrst_watch": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_x500": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_nil": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_ns_dns": {
+    post: {
+      parameters: {
+        body: {
+          args: { [key: string]: unknown };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/upsert_pins": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: json */
+            data: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
+  "/rpc/uuid_generate_v3": {
+    post: {
+      parameters: {
+        body: {
+          args: {
+            /** Format: text */
+            name: string;
+            /** Format: uuid */
+            namespace: string;
+          };
+        };
+        header: {
+          /** Preference */
+          Prefer?: parameters["preferParams"];
+        };
+      };
+      responses: {
+        /** OK */
+        200: unknown;
+      };
+    };
+  };
 }
 
 export interface definitions {
@@ -1963,6 +2231,8 @@ export interface definitions {
     user_id?: string;
     /** Format: text */
     email?: string;
+    /** Format: text */
+    github_id?: string;
     /** Format: text */
     token?: string;
     /** Format: text */
@@ -1975,6 +2245,27 @@ export interface definitions {
     reason?: string;
     /** Format: public.auth_key_blocked_status_type */
     status?: "Blocked" | "Unblocked";
+  };
+  agreement: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: public.agreement_type */
+    agreement: "web3.storage-tos-v1";
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
   };
   auth_key: {
     /**
@@ -2030,6 +2321,27 @@ export interface definitions {
     inserted_at: string;
     /** Format: timestamp with time zone */
     deleted_at?: string;
+  };
+  backup: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `upload.id`.<fk table='upload' column='id'/>
+     */
+    upload_id: number;
+    /** Format: text */
+    url: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
   };
   content: {
     /**
@@ -2100,32 +2412,6 @@ export interface definitions {
      */
     updated_at: string;
   };
-  name: {
-    /**
-     * Format: text
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    key: string;
-    /** Format: text */
-    record: string;
-    /** Format: boolean */
-    has_v2_sig: boolean;
-    /** Format: bigint */
-    seqno: number;
-    /** Format: bigint */
-    validity: number;
-    /**
-     * Format: timestamp with time zone
-     * @default timezone('utc'::text, now())
-     */
-    inserted_at: string;
-    /**
-     * Format: timestamp with time zone
-     * @default timezone('utc'::text, now())
-     */
-    updated_at: string;
-  };
   pin: {
     /**
      * Format: bigint
@@ -2143,7 +2429,6 @@ export interface definitions {
       | "Pinning"
       | "Unpinning"
       | "Unpinned"
-      | "Remote"
       | "PinQueued"
       | "UnpinQueued"
       | "Sharded"
@@ -2186,32 +2471,6 @@ export interface definitions {
     ipfs_peer_id?: string;
     /** Format: text */
     region?: string;
-  };
-  pin_request: {
-    /**
-     * Format: bigint
-     * @description Note:
-     * This is a Primary Key.<pk/>
-     */
-    id: number;
-    /**
-     * Format: text
-     * @description Note:
-     * This is a Foreign Key to `content.cid`.<fk table='content' column='cid'/>
-     */
-    content_cid: string;
-    /** Format: integer */
-    attempts?: number;
-    /**
-     * Format: timestamp with time zone
-     * @default timezone('utc'::text, now())
-     */
-    inserted_at: string;
-    /**
-     * Format: timestamp with time zone
-     * @default timezone('utc'::text, now())
-     */
-    updated_at: string;
   };
   pin_sync_request: {
     /**
@@ -2304,6 +2563,8 @@ export interface definitions {
     type: "Car" | "Upload" | "Blob" | "Multipart";
     /** Format: text */
     name?: string;
+    /** Format: ARRAY */
+    backup_urls?: unknown[];
     /**
      * Format: timestamp with time zone
      * @default timezone('utc'::text, now())
@@ -2316,10 +2577,6 @@ export interface definitions {
     updated_at: string;
     /** Format: timestamp with time zone */
     deleted_at?: string;
-    /**
-     * Format: created is a timestamp with time zone
-     */
-    backup_urls: string[];
   };
   user: {
     /**
@@ -2351,6 +2608,22 @@ export interface definitions {
      */
     updated_at: string;
   };
+  user_customer: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: text */
+    customer_id: string;
+  };
   user_tag: {
     /**
      * Format: bigint
@@ -2365,11 +2638,50 @@ export interface definitions {
      */
     user_id: number;
     /** Format: public.user_tag_type */
-    tag: "HasAccountRestriction" | "HasPsaAccess" | "StorageLimitBytes";
+    tag:
+      | "HasAccountRestriction"
+      | "HasDeleteRestriction"
+      | "HasPsaAccess"
+      | "StorageLimitBytes";
     /** Format: text */
     value: string;
     /** Format: text */
     reason: string;
+    /**
+     * Format: timestamp with time zone
+     * @default timezone('utc'::text, now())
+     */
+    inserted_at: string;
+    /** Format: timestamp with time zone */
+    deleted_at?: string;
+  };
+  user_tag_proposal: {
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Primary Key.<pk/>
+     */
+    id: number;
+    /**
+     * Format: bigint
+     * @description Note:
+     * This is a Foreign Key to `user.id`.<fk table='user' column='id'/>
+     */
+    user_id: number;
+    /** Format: public.user_tag_type */
+    tag:
+      | "HasAccountRestriction"
+      | "HasDeleteRestriction"
+      | "HasPsaAccess"
+      | "StorageLimitBytes";
+    /** Format: text */
+    proposed_tag_value: string;
+    /** Format: jsonb */
+    user_proposal_form: string;
+    /** Format: text */
+    admin_decision_message?: string;
+    /** Format: public.user_tag_proposal_decision_type */
+    admin_decision_type?: "Approved" | "Declined";
     /**
      * Format: timestamp with time zone
      * @default timezone('utc'::text, now())
@@ -2411,6 +2723,8 @@ export interface parameters {
   /** Format: text */
   "rowFilter.admin_search.email": string;
   /** Format: text */
+  "rowFilter.admin_search.github_id": string;
+  /** Format: text */
   "rowFilter.admin_search.token": string;
   /** Format: text */
   "rowFilter.admin_search.token_id": string;
@@ -2422,6 +2736,16 @@ export interface parameters {
   "rowFilter.admin_search.reason": string;
   /** Format: public.auth_key_blocked_status_type */
   "rowFilter.admin_search.status": string;
+  /** @description agreement */
+  "body.agreement": definitions["agreement"];
+  /** Format: bigint */
+  "rowFilter.agreement.id": string;
+  /** Format: bigint */
+  "rowFilter.agreement.user_id": string;
+  /** Format: public.agreement_type */
+  "rowFilter.agreement.agreement": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.agreement.inserted_at": string;
   /** @description auth_key */
   "body.auth_key": definitions["auth_key"];
   /** Format: bigint */
@@ -2452,6 +2776,16 @@ export interface parameters {
   "rowFilter.auth_key_history.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.auth_key_history.deleted_at": string;
+  /** @description backup */
+  "body.backup": definitions["backup"];
+  /** Format: bigint */
+  "rowFilter.backup.id": string;
+  /** Format: bigint */
+  "rowFilter.backup.upload_id": string;
+  /** Format: text */
+  "rowFilter.backup.url": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.backup.inserted_at": string;
   /** @description content */
   "body.content": definitions["content"];
   /** Format: text */
@@ -2484,22 +2818,6 @@ export interface parameters {
   "rowFilter.metric.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.metric.updated_at": string;
-  /** @description name */
-  "body.name": definitions["name"];
-  /** Format: text */
-  "rowFilter.name.key": string;
-  /** Format: text */
-  "rowFilter.name.record": string;
-  /** Format: boolean */
-  "rowFilter.name.has_v2_sig": string;
-  /** Format: bigint */
-  "rowFilter.name.seqno": string;
-  /** Format: bigint */
-  "rowFilter.name.validity": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.name.inserted_at": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.name.updated_at": string;
   /** @description pin */
   "body.pin": definitions["pin"];
   /** Format: bigint */
@@ -2526,18 +2844,6 @@ export interface parameters {
   "rowFilter.pin_location.ipfs_peer_id": string;
   /** Format: text */
   "rowFilter.pin_location.region": string;
-  /** @description pin_request */
-  "body.pin_request": definitions["pin_request"];
-  /** Format: bigint */
-  "rowFilter.pin_request.id": string;
-  /** Format: text */
-  "rowFilter.pin_request.content_cid": string;
-  /** Format: integer */
-  "rowFilter.pin_request.attempts": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.pin_request.inserted_at": string;
-  /** Format: timestamp with time zone */
-  "rowFilter.pin_request.updated_at": string;
   /** @description pin_sync_request */
   "body.pin_sync_request": definitions["pin_sync_request"];
   /** Format: bigint */
@@ -2584,6 +2890,8 @@ export interface parameters {
   "rowFilter.upload.type": string;
   /** Format: text */
   "rowFilter.upload.name": string;
+  /** Format: ARRAY */
+  "rowFilter.upload.backup_urls": string;
   /** Format: timestamp with time zone */
   "rowFilter.upload.inserted_at": string;
   /** Format: timestamp with time zone */
@@ -2610,6 +2918,14 @@ export interface parameters {
   "rowFilter.user.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.user.updated_at": string;
+  /** @description user_customer */
+  "body.user_customer": definitions["user_customer"];
+  /** Format: bigint */
+  "rowFilter.user_customer.id": string;
+  /** Format: bigint */
+  "rowFilter.user_customer.user_id": string;
+  /** Format: text */
+  "rowFilter.user_customer.customer_id": string;
   /** @description user_tag */
   "body.user_tag": definitions["user_tag"];
   /** Format: bigint */
@@ -2626,6 +2942,26 @@ export interface parameters {
   "rowFilter.user_tag.inserted_at": string;
   /** Format: timestamp with time zone */
   "rowFilter.user_tag.deleted_at": string;
+  /** @description user_tag_proposal */
+  "body.user_tag_proposal": definitions["user_tag_proposal"];
+  /** Format: bigint */
+  "rowFilter.user_tag_proposal.id": string;
+  /** Format: bigint */
+  "rowFilter.user_tag_proposal.user_id": string;
+  /** Format: public.user_tag_type */
+  "rowFilter.user_tag_proposal.tag": string;
+  /** Format: text */
+  "rowFilter.user_tag_proposal.proposed_tag_value": string;
+  /** Format: jsonb */
+  "rowFilter.user_tag_proposal.user_proposal_form": string;
+  /** Format: text */
+  "rowFilter.user_tag_proposal.admin_decision_message": string;
+  /** Format: public.user_tag_proposal_decision_type */
+  "rowFilter.user_tag_proposal.admin_decision_type": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.user_tag_proposal.inserted_at": string;
+  /** Format: timestamp with time zone */
+  "rowFilter.user_tag_proposal.deleted_at": string;
 }
 
 export interface operations {}

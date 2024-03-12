@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 
+import Link from 'components/link/link';
 import Modal from 'modules/zero/components/modal/modal';
 import CloseIcon from 'assets/icons/close';
 import Button from 'components/button/button.js';
@@ -16,7 +16,7 @@ const AccountBlockedModal = ({ hasAccountRestriction }) => {
     }
   }, [hasAccountRestriction, modalState]);
 
-  return (
+  return modalState[0] ? (
     <div className="account-blocked-modal">
       <Modal
         className=""
@@ -40,7 +40,7 @@ const AccountBlockedModal = ({ hasAccountRestriction }) => {
         </div>
       </Modal>
     </div>
-  );
+  ) : null;
 };
 
 export default AccountBlockedModal;

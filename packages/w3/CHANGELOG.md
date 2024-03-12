@@ -1,5 +1,44 @@
 # Changelog
 
+## [2.8.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.7.0...w3-v2.8.0) (2023-03-03)
+
+
+### Features
+
+* update to latest web3.storage@4.5 ([#2232](https://github.com/web3-storage/web3.storage/issues/2232)) ([312a940](https://github.com/web3-storage/web3.storage/commit/312a940ce81ee75dc86555dee1a08a5eae23b536))
+
+## [2.7.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.6.1...w3-v2.7.0) (2022-09-14)
+
+
+### Features
+
+* `w3 open <cid>` to open cid on w3s.link in browser ([#1892](https://github.com/web3-storage/web3.storage/issues/1892)) ([5d3188d](https://github.com/web3-storage/web3.storage/commit/5d3188d18fc71faa8468b4b425637b4a67064aac))
+* `w3` command using w3s.link ([#1807](https://github.com/web3-storage/web3.storage/issues/1807)) ([6a3e7af](https://github.com/web3-storage/web3.storage/commit/6a3e7af61d1e5dcf789f4f3690732c1b17814b9d))
+
+
+### Bug Fixes
+
+* cjs support for w3name ([#1820](https://github.com/web3-storage/web3.storage/issues/1820)) ([49227b6](https://github.com/web3-storage/web3.storage/commit/49227b638f71dd5d33b82e520d83135eff0d0c37))
+
+
+### Other Changes
+
+* add an e2e test for the w3name proxy module ([#1715](https://github.com/web3-storage/web3.storage/issues/1715)) ([c4633f6](https://github.com/web3-storage/web3.storage/commit/c4633f6f504ff52df0712fb1db725d6fa55f5d1c))
+
+## 2.6.1 (2022-08-24)
+
+
+### Features
+
+* add w3name proxy ([#1707](https://github.com/web3-storage/web3.storage/issues/1707)) ([f2f9662](https://github.com/web3-storage/web3.storage/commit/f2f9662fc74ea24a24141aa1bf42288c95b5bd35))
+* embed w3name package ([#1683](https://github.com/web3-storage/web3.storage/issues/1683)) ([20d1c94](https://github.com/web3-storage/web3.storage/commit/20d1c9446ca1da475a4d783ef3bc1fc09c0ee43f))
+
+
+### Bug Fixes
+
+* add ipns migration cron job ([#1705](https://github.com/web3-storage/web3.storage/issues/1705)) ([4b6e67f](https://github.com/web3-storage/web3.storage/commit/4b6e67f07983b06e9bad9c27deb5d6c5b993258e))
+* undeprecate the `w3 name...` commands. ([#1777](https://github.com/web3-storage/web3.storage/issues/1777)) ([a9ee094](https://github.com/web3-storage/web3.storage/commit/a9ee094512433572f55c74900ec20c9d5c72d72a))
+
 ## [2.6.0](https://github.com/web3-storage/web3.storage/compare/w3-v2.5.0...w3-v2.6.0) (2022-04-19)
 
 

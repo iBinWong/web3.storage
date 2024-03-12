@@ -1,4 +1,7 @@
-<h1 align="center">⁂<br/>web3.storage</h1>
+> ⚠️ **DEPRECATED** This repo will be archived on January 9, 2024 as this web3.storage API will no longer take new uploads. Please use the [new client and API](https://github.com/web3-storage/w3up/tree/main/packages/w3up-client) for future usage of web3.storage. Documentation for the new client can be found [here](https://web3.storage/docs). You can learn more about these changes [here](https://blog.web3.storage/posts/the-data-layer-is-here-with-the-new-web3-storage).
+
+<h1 align="center"><a href="https://web3.storage"><img width="25%" src="https://user-images.githubusercontent.com/11778450/227262707-1a9674a7-9286-43e3-87b4-98b388677720.png" alt="web3.storage logo" /></a>
+</h1>
 <p align="center">The simple file storage service for IPFS &amp; Filecoin.</p>
 
 ## Usage
@@ -49,7 +52,7 @@ $ w3 put ~/Pictures/ayy-lamo.jpg
 ⁂ https://dweb.link/ipfs/bafybeid6gpbsqkpfrsx6b6ywrt24je4xqe4eo4y2wldisl6sk7byny5uky
 ```
 
-Use it anywhere you can get a shell. Get creative! For example, we use this for perfomance testing the [upload speed in CI](https://github.com/web3-storage/web3.storage/blob/9fafc830b841da0dd6bd5319c77febaded232240/.github/workflows/cron-test.yml#L36)!
+Use it anywhere you can get a shell. Get creative! For example, we use this for performance testing the [upload speed in CI](https://github.com/web3-storage/web3.storage/blob/9fafc830b841da0dd6bd5319c77febaded232240/.github/workflows/cron-test.yml#L36)!
 
 Run `w3 --help` or have a look at https://github.com/web3-storage/web3.storage/tree/main/packages/w3#readme to find out everything it can do.
 
@@ -141,7 +144,7 @@ npm init -w packages/website
 To run an npm script in one or more workspaces
 
 ```console
-# run test commmand in package `a` and `b`
+# run test command in package `a` and `b`
 npm run test --workspace=packages/a --workspace=packages/b
 ```
 
@@ -159,7 +162,7 @@ Our docs website is currently hosted in a [separate repo](https://github.com/web
 
 ## Learn more
 
-To learn more about the Web3.Storage service, upload a file through our friendly UI, or find detailed documentation for the JS client library, please head over to https://web3.storage
+To learn more about the web3.storage service, upload a file through our friendly UI, or find detailed documentation for the JS client library, please head over to https://web3.storage
 
 
 <p align="center">

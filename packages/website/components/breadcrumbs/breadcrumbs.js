@@ -1,54 +1,31 @@
-import { useRouter } from 'next/router';
 import clsx from 'clsx';
-import Link from 'next/link';
 
-import GeneralPageData from '../../content/pages/general.json';
+import Link from '../link/link';
+
+/** @typedef {Object} Breadcrumb = {url: string, text: string} */
 
 /**
  * Breadcrumbs
  *
- * @param String props.variant
- * @callback props.click
- * @callback props.keyboard
+ * @param {Object} props
+ * @param {String} props.variant
+ * @param {Object} [props.items]
+ * @param {React.MouseEventHandler<HTMLAnchorElement>} props.click
  */
-export default function Breadcrumbs({ variant, click, keyboard }) {
-  const router = useRouter();
-  const breadcrumbs = GeneralPageData.breadcrumbs;
-  const routeName = router.route.replace('/', '');
-  const links = [
-    {
-      url: '/',
-      text: breadcrumbs.index,
-    },
-  ];
-
-  if (routeName.includes('docs')) {
-    links.push({ url: '', text: breadcrumbs['docs'] });
-  }
-  if (breadcrumbs.hasOwnProperty(routeName)) {
-    links.push({ url: '', text: breadcrumbs[routeName] });
-  }
-
+export default function Breadcrumbs({ variant, click, items }) {
   return (
     <div className="breadcrumbs">
-      {links.map(item => (
+      {items.map((item, idx) => (
         <div key={item.text} className="breadcrumb-wrapper">
-          {item.url ? (
-            <Link href={item.url} passHref>
-              <a
-                href="replace"
-                className={clsx('breadcrumb', 'breadcrumb-link', variant)}
-                onClick={e => click(e)}
-                onKeyPress={e => keyboard(e, item.url)}
-              >
-                {item.text}
-              </a>
+          {idx !== items.length - 1 ? (
+            <Link href={item.url} className={clsx('breadcrumb', 'breadcrumb-link', variant)} onClick={click}>
+              {item.text}
             </Link>
           ) : (
             <div className={clsx('breadcrumb', 'breadcrumb-text', variant)}>{item.text}</div>
           )}
 
-          <div className={clsx('breadcrumb-divider', variant)}>{item.url}</div>
+          {idx !== items.length - 1 && <div className={clsx('breadcrumb-divider', variant)}>/</div>}
         </div>
       ))}
     </div>

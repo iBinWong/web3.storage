@@ -131,7 +131,7 @@ describe('upload', () => {
     assert.strictEqual(backups.length, 3, 'upload has three backups')
 
     // Lists single upload
-    const { uploads: userUploads, count } = await client.listUploads(user._id)
+    const { uploads: userUploads, count } = await client.listUploads(user._id, { page: 1 })
     assert(userUploads, 'user has uploads')
     assert.strictEqual(userUploads.length, 1, 'partial uploads result in a single upload returned for a user')
     assert.strictEqual(count, 1, 'partial uploads result in a single upload count for a user')
@@ -179,7 +179,7 @@ describe('upload', () => {
     })
 
     // Lists current user uploads
-    const { uploads: userUploads } = await client.listUploads(user._id)
+    const { uploads: userUploads } = await client.listUploads(user._id, { page: 1 })
 
     // Delete previously created upload
     await client.deleteUpload(user._id, otherCid)
@@ -195,7 +195,7 @@ describe('upload', () => {
     const wasDeletedAgain = await client.deleteUpload(user._id, otherCid)
     assert.strictEqual(wasDeletedAgain, undefined, 'should fail to delete upload again')
 
-    const { uploads: finalUserUploads } = await client.listUploads(user._id)
+    const { uploads: finalUserUploads } = await client.listUploads(user._id, { page: 1 })
     assert(finalUserUploads, 'user upload deleted')
     assert.strictEqual(finalUserUploads.length, userUploads.length - 1, 'user upload deleted')
 
@@ -274,12 +274,83 @@ describe('upload', () => {
     })
 
     // Default sort {inserted_at, Desc}
-    const { uploads: userUploads } = await client.listUploads(user._id)
+    const { uploads: userUploads } = await client.listUploads(user._id, { page: 1 })
     assert.ok(userUploads.find(upload => upload.cid === sourceCid))
   })
 
+  it('lists user uploads with CAR links in parts', async () => {
+    const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+    const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    // note: `exampleCarParkUrl` and `exampleS3Url` are for same CAR. The s3 url is base32(multihash(car)) and the other is cid v1
+    const exampleCarParkUrl = 'https://carpark-dev.web3.storage/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea.car'
+    const exampleS3Url = 'https://dotstorage-dev-0.s3.us-east-1.amazonaws.com/raw/bafybeiao32xtnrlibcekpw3vyfi5txgrmvvrua4pccx3xik33ll3qhko2q/2/ciqplrl7tuebgpzbo5nqlqus5hj2kowxzz7ayr4z6ao2ftg7ibcr3ca.car'
+    const created = new Date().toISOString()
+    const name = `rand-${Math.random().toString().slice(2)}`
+    await client.createUpload({
+      user: user._id,
+      contentCid,
+      sourceCid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${created}`, exampleCarParkUrl, exampleS3Url],
+      created
+    })
+
+    // Default sort {inserted_at, Desc}
+    const { uploads } = await client.listUploads(user._id, { page: 1 })
+    assert.ok(uploads.length > 0)
+    for (const upload of uploads) {
+      // backupUrls raw is private
+      assert.ok(!('backupUrls' in upload), 'upload does not have backupUrls property')
+      assert.ok(Array.isArray(upload.parts), 'upload.parts is an array')
+    }
+    const namedUpload = uploads.find(u => u.name === name)
+    assert.deepEqual(namedUpload.parts, [
+      // this corresponds to `exampleCarParkUrl`
+      'bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea'
+    ])
+  })
+
+  it('lists user uploads with CAR links in parts', async () => {
+    const contentCid = 'bafybeigdyrzt5sfp7udm7hu76uh7y26nf3efuylqabf3oclgtqy55fbzdi'
+    const sourceCid = 'QmbWqxBEKC3P8tqsKc98xmWNzrzDtRLMiMPL8wBuTGsMnR'
+    const exampleCarParkUrl = 'https://carpark-dev.web3.storage/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea/bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea.car'
+    const exampleS3Url = 'https://dotstorage-dev-0.s3.us-east-1.amazonaws.com/raw/bafybeiao32xtnrlibcekpw3vyfi5txgrmvvrua4pccx3xik33ll3qhko2q/2/ciqplrl7tuebgpzbo5nqlqus5hj2kowxzz7ayr4z6ao2ftg7ibcr3ca.car'
+    const created = new Date().toISOString()
+    const name = `rand-${Math.random().toString().slice(2)}`
+    await client.createUpload({
+      user: user._id,
+      contentCid,
+      sourceCid,
+      authKey: authKeys[0]._id,
+      type,
+      dagSize,
+      name,
+      pins: [initialPinData],
+      backupUrls: [`https://backup.cid/${created}`, exampleCarParkUrl, exampleS3Url],
+      created
+    })
+
+    // Default sort {inserted_at, Desc}
+    const { uploads } = await client.listUploads(user._id, { page: 1 })
+    assert.ok(uploads.length > 0)
+    for (const upload of uploads) {
+      // backupUrls raw is private
+      assert.ok(!('backupUrls' in upload), 'upload does not have backupUrls property')
+      assert.ok(Array.isArray(upload.parts), 'upload.parts is an array')
+    }
+    const namedUpload = uploads.find(u => u.name === name)
+    assert.deepEqual(namedUpload.parts, [
+      // this corresponds to `exampleCarParkUrl`
+      'bagbaiera6xcx7hiicm7sc523axbjf2otuu5nptt6brdzt4a5ulgn6qcfdwea'
+    ])
+  })
+
   it('can list user uploads with several options', async () => {
-    const { uploads: previousUserUploads, count: previousUserUploadCount } = await client.listUploads(user._id)
+    const { uploads: previousUserUploads, count: previousUserUploadCount } = await client.listUploads(user._id, { page: 1 })
     assert(previousUserUploads, 'user has uploads')
     assert(previousUserUploadCount > 0, 'user has counted uploads')
 
@@ -299,24 +370,27 @@ describe('upload', () => {
     })
 
     // Default sort {inserted_at, Desc}
-    const { uploads: userUploadsDefaultSort } = await client.listUploads(user._id)
+    const { uploads: userUploadsDefaultSort } = await client.listUploads(user._id, { page: 1 })
     assert.strictEqual(userUploadsDefaultSort.length, previousUserUploads.length + 1, 'user has the second upload')
     assert.strictEqual(userUploadsDefaultSort[0].cid, differentCid, 'last upload first')
 
     // Sort {inserted_at, Asc}
     const { uploads: userUploadsAscAndInsertedSort } = await client.listUploads(user._id, {
+      page: 1,
       sortOrder: 'Asc'
     })
     assert.notStrictEqual(userUploadsAscAndInsertedSort[0].cid, differentCid, 'first upload first')
 
     // Sort {name, Desc}
     const { uploads: userUploadsByNameSort } = await client.listUploads(user._id, {
+      page: 1,
       sortBy: 'Name'
     })
     assert.strictEqual(userUploadsByNameSort[0].cid, differentCid, 'last upload first')
 
     // Sort {name, Asc} with size and page
     const { uploads: userUploadsAscAndByNameSort } = await client.listUploads(user._id, {
+      page: 1,
       sortBy: 'Name',
       sortOrder: 'Asc',
       size: 1
@@ -325,19 +399,11 @@ describe('upload', () => {
     assert.notStrictEqual(userUploadsAscAndByNameSort[0].cid, differentCid, 'first upload first')
 
     // Filter with before second upload
-    const { uploads: userUploadsBeforeTheLatest } = await client.listUploads(user._id, { before: created })
+    const { uploads: userUploadsBeforeTheLatest } = await client.listUploads(user._id, { before: new Date(created) })
     assert.strictEqual(userUploadsBeforeTheLatest.length, previousUserUploads.length, 'list without the second upload')
 
-    // Filter with after second upload
-    const { uploads: userUploadsAfterTheLatest } = await client.listUploads(user._id, { after: created })
-    assert.strictEqual(userUploadsAfterTheLatest.length, 1, 'list with only the second upload')
-
-    // offset uploads
-    const { uploads: offsetUserUploads } = await client.listUploads(user._id, { offset: previousUserUploads.length })
-    assert.strictEqual(offsetUserUploads.length, 1, 'list with only the second upload')
-
     // paginate uploads
-    const { uploads: paginatedUserUploads, count: paginatedUserUploadCount } = await client.listUploads(user._id, { offset: 1, size: 1 })
+    const { uploads: paginatedUserUploads, count: paginatedUserUploadCount } = await client.listUploads(user._id, { page: 2, size: 1 })
     assert.strictEqual(paginatedUserUploads.length, 1, 'only returns the paginated uploads')
     assert.strictEqual(paginatedUserUploadCount, previousUserUploads.length + 1, 'only returns the paginated uploads')
   })

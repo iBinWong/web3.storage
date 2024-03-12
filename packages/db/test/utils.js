@@ -127,36 +127,12 @@ export async function createUserWithFiles (dbClient, options = {}) {
   const pinRequests = 3
   const dagSize = Math.ceil(((percentStorageUsed / 100) * storageQuota) / (uploads + pinRequests))
 
-  // Create a failed upload.
-  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
-    dagSize,
-    pins: pinsError
-  })
-
-  // Create a yet to be pinned upload.
-  await createUpload(dbClient, Number(user._id), Number(authKey), await randomCid(), {
-    dagSize,
-    pins: initialPinsNotPinned
-  })
-
   for (let i = 0; i < uploads; i++) {
     const cid = await randomCid()
     await createUpload(dbClient, Number(user._id), Number(authKey), cid, {
       dagSize
     })
   }
-
-  // Create a failed PinRequest.
-  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
-    dagSize,
-    pins: pinsError
-  })
-
-  // Create a yet to be pinned PinRequest.
-  await createPsaPinRequest(dbClient, authKey, await randomCid(), {
-    dagSize,
-    pins: initialPinsNotPinned
-  })
 
   for (let i = 0; i < pinRequests; i++) {
     const cid = await randomCid()
@@ -249,14 +225,12 @@ export async function getUpload (dbClient, cid, userId) {
 }
 
 /**
- *
  * @param {import('../index').DBClient} dbClient
  * @param {string} userId
- * @param {import('../db-client-types').ListUploadsOptions} [listUploadOptions]
- *
+ * @param {import('../index').PageRequest} pageRequest
  */
-export async function listUploads (dbClient, userId, listUploadOptions) {
-  return dbClient.listUploads(userId, listUploadOptions)
+export async function listUploads (dbClient, userId, pageRequest) {
+  return dbClient.listUploads(userId, pageRequest)
 }
 
 /**
